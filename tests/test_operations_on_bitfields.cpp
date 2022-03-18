@@ -3,8 +3,57 @@
  * @brief       Tests basic operations on bitfields.
  * @author      Kacper Kowalski - mailprivate
  */
+#include <catch2/catch_template_test_macros.hpp>
 #include <catch2/catch_test_macros.hpp>
 
-TEST_CASE("Operations on bitfields within a one-byte bitfield", "[operations]")
+#include "jungles/bitfield.hpp"
+
+#include <cinttypes>
+
+using namespace jungles;
+
+enum class Reg
 {
+    field1,
+    field2,
+    field3,
+    field4
+};
+
+TEST_CASE("Operations on bitfields for one byte long bitfield", "[operations]")
+{
+    Bitfield<uint8_t,
+             ByteOrder::little,
+             FieldOrder::left_to_right,
+             Field{Reg::field1, 3},
+             Field{Reg::field2, 2},
+             Field{Reg::field3, 3}>
+        bf;
+
+    SECTION("Setting most-right field")
+    {
+        bf.at<Reg::field1>() = 0b010;
+        REQUIRE(bf.at<Reg::field1>() == 0b010);
+    }
+
+    SECTION("Setting field in the middle")
+    {
+        bf.at<Reg::field2>() = 0b11;
+        REQUIRE(bf.at<Reg::field2>() == 0b11);
+    }
+
+    SECTION("Bitwise OR operation")
+    {
+        bf.at<Reg::field3>() = 0b10;
+        bf.at<Reg::field3>() |= 0b11;
+        REQUIRE(bf.at<Reg::field3>() == 0b11);
+    }
+
+    SECTION("Bitwise bit clearing")
+    {
+        bf.at<Reg::field3>() = 0b111;
+        bf.at<Reg::field3>() &= ~0b010;
+        REQUIRE(bf.at<Reg::field3>() == 0b101);
+    }
 }
+
