@@ -57,3 +57,32 @@ TEST_CASE("Operations on bitfields for one byte long bitfield", "[operations]")
     }
 }
 
+TEST_CASE("Operations on bitfields for unsigned as underlying type", "[operations]")
+{
+    Bitfield<unsigned,
+             ByteOrder::little,
+             FieldOrder::left_to_right,
+             Field{Reg::field1, 30},
+             Field{Reg::field2, 1},
+             Field{Reg::field3, 1}>
+        bf;
+
+    bf.at<Reg::field1>() = 0b11111111111111111111111111111;
+    bf.at<Reg::field1>() &= ~0b00010000000000000000000000000;
+    REQUIRE(bf.at<Reg::field1>() == 0b11101111111111111111111111111);
+}
+
+TEST_CASE("Operations on bitfields for 8-byte long bitfield", "[operations]")
+{
+    Bitfield<uint64_t,
+             ByteOrder::little,
+             FieldOrder::left_to_right,
+             Field{Reg::field1, 31},
+             Field{Reg::field2, 5},
+             Field{Reg::field3, 8}>
+        bf;
+
+    bf.at<Reg::field1>() = 0b1111111111111111111111111111111;
+    bf.at<Reg::field1>() &= ~0b0100000000000000000000000000000;
+    REQUIRE(bf.at<Reg::field1>() == 0b1011111111111111111111111111111);
+}
