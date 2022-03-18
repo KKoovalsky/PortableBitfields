@@ -16,7 +16,11 @@ enum class Reg
     field1,
     field2,
     field3,
-    field4
+    field4,
+    field5,
+    field6,
+    field7,
+    field8
 };
 
 TEST_CASE("Extracts bitfields on one-byte long bitfield, for right-to-left field order", "[extract]")
@@ -42,15 +46,65 @@ TEST_CASE("Extracts bitfields on one-byte long bitfield, for right-to-left field
 
     SECTION("For four fields, with various sizes")
     {
-        // 4, 2, 1, 1
+        Bitfield<uint8_t,
+                 ByteOrder::little,
+                 FieldOrder::right_to_left,
+                 Field{Reg::field1, 1},
+                 Field{Reg::field2, 4},
+                 Field{Reg::field3, 1},
+                 Field{Reg::field4, 2}>
+            bf;
+
+        bf.at<Reg::field1>() = 0b1;
+        bf.at<Reg::field2>() = 0b0101;
+        bf.at<Reg::field3>() = 0b0;
+        bf.at<Reg::field4>() = 0b11;
+
+        REQUIRE(bf.extract<Reg::field1>() == 0b10000000);
+        REQUIRE(bf.extract<Reg::field2>() == 0b00101000);
+        REQUIRE(bf.extract<Reg::field3>() == 0b00000000);
+        REQUIRE(bf.extract<Reg::field4>() == 0b00000011);
     }
 
     SECTION("For each field having size one")
     {
+        Bitfield<uint8_t,
+                 ByteOrder::little,
+                 FieldOrder::right_to_left,
+                 Field{Reg::field1, 1},
+                 Field{Reg::field2, 1},
+                 Field{Reg::field3, 1},
+                 Field{Reg::field4, 1},
+                 Field{Reg::field5, 1},
+                 Field{Reg::field6, 1},
+                 Field{Reg::field7, 1},
+                 Field{Reg::field8, 1}>
+            bf;
+
+        bf.at<Reg::field1>() = 0b1;
+        bf.at<Reg::field2>() = 0b0;
+        bf.at<Reg::field3>() = 0b0;
+        bf.at<Reg::field4>() = 0b1;
+        bf.at<Reg::field5>() = 0b0;
+        bf.at<Reg::field6>() = 0b1;
+        bf.at<Reg::field7>() = 0b1;
+        bf.at<Reg::field8>() = 0b0;
+
+        REQUIRE(bf.extract<Reg::field1>() == 0b10000000);
+        REQUIRE(bf.extract<Reg::field2>() == 0b00000000);
+        REQUIRE(bf.extract<Reg::field3>() == 0b00000000);
+        REQUIRE(bf.extract<Reg::field4>() == 0b00010000);
+        REQUIRE(bf.extract<Reg::field5>() == 0b00000000);
+        REQUIRE(bf.extract<Reg::field6>() == 0b00000100);
+        REQUIRE(bf.extract<Reg::field7>() == 0b00000010);
+        REQUIRE(bf.extract<Reg::field8>() == 0b00000000);
     }
 
     SECTION("For one field, occupying the whole bitfield")
     {
+        Bitfield<uint8_t, ByteOrder::little, FieldOrder::right_to_left, Field{Reg::field1, 8}> bf;
+        bf.at<Reg::field1>() = 0b10010110;
+        REQUIRE(bf.extract<Reg::field1>() == 0b10010110);
     }
 }
 
