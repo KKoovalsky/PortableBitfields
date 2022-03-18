@@ -103,7 +103,7 @@ class Bitfield
     static inline constexpr auto field_sizes{to_field_sizes()};
     static inline constexpr auto field_shifts{to_field_shifts()};
 
-    std::array<UnderlyingType, NumberOfFields> field_values;
+    std::array<UnderlyingType, NumberOfFields> field_values = {};
 };
 
 } // namespace jungles
