@@ -44,21 +44,54 @@ class Bitfield
     template<auto FieldId>
     UnderlyingType& at()
     {
-        auto idx{find_field_index<FieldId>()};
+        constexpr auto idx{find_field_index<FieldId>()};
         return field_values[idx];
     }
 
-  private:
-    static constexpr auto to_field_ids(const auto& fields_)
+    template<auto FieldId>
+    UnderlyingType extract() const
     {
-        using IdType = std::decay_t<decltype(std::decay_t<decltype(fields_)>::value_type::id)>;
+        constexpr auto idx{find_field_index<FieldId>()};
+        constexpr auto shift{field_shifts[idx]};
+        auto v{field_values[idx]};
+        return v << shift;
+    }
+
+  private:
+    static inline constexpr auto to_field_ids()
+    {
+        using IdType = std::decay_t<decltype(std::decay_t<decltype(fields)>::value_type::id)>;
         std::array<IdType, NumberOfFields> ids;
         std::transform(std::begin(fields), std::end(fields), std::begin(ids), [](auto f) { return f.id; });
         return ids;
     }
 
+    static inline constexpr auto to_field_sizes()
+    {
+        std::array<unsigned, NumberOfFields> sizes;
+        std::transform(std::begin(fields), std::end(fields), std::begin(sizes), [](auto f) { return f.size; });
+        return sizes;
+    }
+
+    static inline constexpr auto to_field_shifts()
+    {
+        std::array<unsigned, NumberOfFields> shifts;
+
+        auto shifts_it{std::rbegin(shifts)};
+        auto sizes_it{std::rbegin(field_sizes)};
+
+        unsigned accumulated_field_size{0};
+        while (shifts_it != std::rend(shifts))
+        {
+            *shifts_it++ = accumulated_field_size;
+            accumulated_field_size += *sizes_it++;
+        }
+
+        return shifts;
+    }
+
     template<auto FieldId>
-    constexpr auto find_field_index() const
+    static inline constexpr auto find_field_index()
     {
         constexpr auto it{std::find(std::begin(field_ids), std::end(field_ids), FieldId)};
         static_assert(it != std::end(field_ids), "Field ID not found");
@@ -66,7 +99,9 @@ class Bitfield
     }
 
     static inline constexpr std::array fields{Fields...};
-    static inline constexpr auto field_ids{to_field_ids(fields)};
+    static inline constexpr auto field_ids{to_field_ids()};
+    static inline constexpr auto field_sizes{to_field_sizes()};
+    static inline constexpr auto field_shifts{to_field_shifts()};
 
     std::array<UnderlyingType, NumberOfFields> field_values;
 };
