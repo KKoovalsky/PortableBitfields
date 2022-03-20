@@ -21,11 +21,6 @@ enum class ByteOrder
     big,
     little
 };
-enum class FieldOrder
-{
-    right_to_left,
-    left_to_right
-};
 
 template<typename IdType>
 struct Field
@@ -34,7 +29,7 @@ struct Field
     const unsigned size;
 };
 
-template<std::integral UnderlyingType, ByteOrder ByteOrder_, FieldOrder FieldOrder_, auto... Fields>
+template<std::integral UnderlyingType, ByteOrder ByteOrder_,  auto... Fields>
 class Bitfield
 {
   private:

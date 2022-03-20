@@ -8,7 +8,6 @@
 #include "jungles/bitfield.hpp"
 
 #include <iostream>
-
 using namespace jungles;
 
 enum class Reg
@@ -29,7 +28,6 @@ TEST_CASE("Extracts bitfields on one-byte long bitfield, for right-to-left field
     {
         Bitfield<uint8_t,
                  ByteOrder::little,
-                 FieldOrder::right_to_left,
                  Field{Reg::field1, 3},
                  Field{Reg::field2, 2},
                  Field{Reg::field3, 3}>
@@ -48,7 +46,6 @@ TEST_CASE("Extracts bitfields on one-byte long bitfield, for right-to-left field
     {
         Bitfield<uint8_t,
                  ByteOrder::little,
-                 FieldOrder::right_to_left,
                  Field{Reg::field1, 1},
                  Field{Reg::field2, 4},
                  Field{Reg::field3, 1},
@@ -70,7 +67,6 @@ TEST_CASE("Extracts bitfields on one-byte long bitfield, for right-to-left field
     {
         Bitfield<uint8_t,
                  ByteOrder::little,
-                 FieldOrder::right_to_left,
                  Field{Reg::field1, 1},
                  Field{Reg::field2, 1},
                  Field{Reg::field3, 1},
@@ -102,28 +98,17 @@ TEST_CASE("Extracts bitfields on one-byte long bitfield, for right-to-left field
 
     SECTION("For one field, occupying the whole bitfield")
     {
-        Bitfield<uint8_t, ByteOrder::little, FieldOrder::right_to_left, Field{Reg::field1, 8}> bf;
+        Bitfield<uint8_t, ByteOrder::little, Field{Reg::field1, 8}> bf;
         bf.at<Reg::field1>() = 0b10010110;
         REQUIRE(bf.extract<Reg::field1>() == 0b10010110);
     }
 }
 
-TEST_CASE("Extracts bitfields on one-byte long bitfield, for left-to-right field order", "[extract]")
+TEST_CASE("Extracts bitfields on 4-byte long bitfield, little endian", "[extract]")
 {
 }
 
-TEST_CASE("Extracts bitfields on 4-byte long bitfield, for right-to-left field order, little endian", "[extract]")
+TEST_CASE("Extracts bitfields on 4-byte long bitfield, big endian", "[extract]")
 {
 }
 
-TEST_CASE("Extracts bitfields on 4-byte long bitfield, for right-to-left field order, big endian", "[extract]")
-{
-}
-
-TEST_CASE("Extracts bitfields on 4-byte long bitfield, for left-to-right field order, little endian", "[extract]")
-{
-}
-
-TEST_CASE("Extracts bitfields on 4-byte long bitfield, for left-to-right field order, big endian", "[extract]")
-{
-}

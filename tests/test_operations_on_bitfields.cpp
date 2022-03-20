@@ -24,7 +24,6 @@ TEST_CASE("Operations on bitfields for one byte long bitfield", "[operations]")
 {
     Bitfield<uint8_t,
              ByteOrder::little,
-             FieldOrder::left_to_right,
              Field{Reg::field1, 3},
              Field{Reg::field2, 2},
              Field{Reg::field3, 3}>
@@ -61,7 +60,6 @@ TEST_CASE("Operations on bitfields for unsigned as underlying type", "[operation
 {
     Bitfield<unsigned,
              ByteOrder::little,
-             FieldOrder::left_to_right,
              Field{Reg::field1, 30},
              Field{Reg::field2, 1},
              Field{Reg::field3, 1}>
@@ -76,7 +74,6 @@ TEST_CASE("Operations on bitfields for 8-byte long bitfield", "[operations]")
 {
     Bitfield<uint64_t,
              ByteOrder::little,
-             FieldOrder::left_to_right,
              Field{Reg::field1, 31},
              Field{Reg::field2, 5},
              Field{Reg::field3, 8}>
