@@ -143,14 +143,59 @@ TEST_CASE("Extracts bitfields on 4-byte long bitfield, little endian", "[extract
 
     SECTION("For a two bit bitfield lying across two bytes")
     {
+        Bitfield<uint32_t, ByteOrder::little, Field{Reg::field1, 15}, Field{Reg::field2, 2}, Field{Reg::field3, 15}> bf;
+
+        bf.at<Reg::field1>() = 0b000001111100000;
+        bf.at<Reg::field2>() = 0b11;
+        bf.at<Reg::field3>() = 0b000001111100000;
+
+        REQUIRE(bf.extract<Reg::field2>() == 0b00000000100000000000000100000000);
     }
 
     SECTION("For four fields evenly aligned")
     {
+        Bitfield<uint32_t,
+                 ByteOrder::little,
+                 Field{Reg::field1, 8},
+                 Field{Reg::field2, 8},
+                 Field{Reg::field3, 8},
+                 Field{Reg::field4, 8}>
+            bf;
+
+        bf.at<Reg::field1>() = 0xFF;
+        bf.at<Reg::field2>() = 0x00;
+        bf.at<Reg::field3>() = 0xFF;
+        bf.at<Reg::field4>() = 0x00;
+
+        REQUIRE(bf.extract<Reg::field1>() == 0x000000FF);
+        REQUIRE(bf.extract<Reg::field2>() == 0x00);
+        REQUIRE(bf.extract<Reg::field3>() == 0x00FF0000);
+        REQUIRE(bf.extract<Reg::field4>() == 0b00);
     }
 
     SECTION("For four fields unevenly aligned")
     {
+        Bitfield<uint32_t,
+                 ByteOrder::little,
+                 Field{Reg::field1, 9},
+                 Field{Reg::field2, 7},
+                 Field{Reg::field3, 11},
+                 Field{Reg::field4, 5}>
+            bf;
+
+        bf.at<Reg::field1>() = 0b011001100;
+        bf.at<Reg::field2>() = 0b1111000;
+        bf.at<Reg::field3>() = 0b01111011110;
+        bf.at<Reg::field4>() = 0b00100;
+
+        // Big-endian: 01100110 01111000 01111011 11000100
+        // Little-endian: 11000100 01111011 01111000 01100110
+        // Big-endian field3 extract(): 00000000 00000000 01111011 11000000
+        // Big-endian field4 extract(): 00000000 00000000 00000000 00000100
+        REQUIRE(bf.extract<Reg::field1>() == 0b001100110);
+        REQUIRE(bf.extract<Reg::field2>() == 0b0111100000000000);
+        REQUIRE(bf.extract<Reg::field3>() == 0b11000000011110110000000000000000);
+        REQUIRE(bf.extract<Reg::field4>() == 0b00000100000000000000000000000000);
     }
 }
 
