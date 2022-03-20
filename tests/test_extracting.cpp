@@ -26,12 +26,7 @@ TEST_CASE("Extracts bitfields on one-byte long bitfield, for right-to-left field
 {
     SECTION("For three fields, almost evenly aligned")
     {
-        Bitfield<uint8_t,
-                 ByteOrder::little,
-                 Field{Reg::field1, 3},
-                 Field{Reg::field2, 2},
-                 Field{Reg::field3, 3}>
-            bf;
+        Bitfield<uint8_t, ByteOrder::little, Field{Reg::field1, 3}, Field{Reg::field2, 2}, Field{Reg::field3, 3}> bf;
 
         bf.at<Reg::field1>() = 0b101;
         bf.at<Reg::field2>() = 0b11;
@@ -104,11 +99,38 @@ TEST_CASE("Extracts bitfields on one-byte long bitfield, for right-to-left field
     }
 }
 
+TEST_CASE("Extracts bitfields on 4-byte long bitfield, big endian", "[extract]")
+{
+    SECTION("For three fields, evenly aligned")
+    {
+        Bitfield<uint32_t, ByteOrder::little, Field{Reg::field1, 11}, Field{Reg::field2, 11}, Field{Reg::field3, 10}>
+            bf;
+
+        bf.at<Reg::field1>() = 0b10101010101;
+        bf.at<Reg::field2>() = 0b01101101100;
+        bf.at<Reg::field3>() = 0b0111011110;
+
+        REQUIRE(bf.extract<Reg::field1>() == 0b10101010101000000000000000000000);
+        REQUIRE(bf.extract<Reg::field2>() == 0b00000000000011011011000000000000);
+        REQUIRE(bf.extract<Reg::field3>() == 0b00000000000000000000000111011110);
+    }
+
+    SECTION("For a two bit bitfield lying across two bytes")
+    {
+        Bitfield<uint32_t, ByteOrder::little, Field{Reg::field1, 15}, Field{Reg::field2, 2}, Field{Reg::field3, 15}> bf;
+        bf.at<Reg::field1>() = 0b000001111100000;
+        bf.at<Reg::field2>() = 0b11;
+        bf.at<Reg::field3>() = 0b000001111100000;
+
+        REQUIRE(bf.extract<Reg::field2>() == 0b00000000000000011000000000000000);
+    }
+}
+
 TEST_CASE("Extracts bitfields on 4-byte long bitfield, little endian", "[extract]")
 {
 }
 
-TEST_CASE("Extracts bitfields on 4-byte long bitfield, big endian", "[extract]")
+TEST_CASE("Extracts bitfields on 4-byte long bitfield, little endian", "[extract]")
 {
 }
 

@@ -29,7 +29,7 @@ struct Field
     const unsigned size;
 };
 
-template<std::integral UnderlyingType, ByteOrder ByteOrder_,  auto... Fields>
+template<std::integral UnderlyingType, ByteOrder ByteOrder_, auto... Fields>
 class Bitfield
 {
   private:
