@@ -201,5 +201,13 @@ TEST_CASE("Extracts bitfields on 4-byte long bitfield, little endian", "[extract
 
 TEST_CASE("Extracts bitfields on 8-byte long bitfield, little endian", "[extract]")
 {
+    Bitfield<uint64_t, ByteOrder::little, Field{Reg::field1, 9}, Field{Reg::field2, 55}> bf;
+    bf.at<Reg::field1>() = 0b101101101;
+    bf.at<Reg::field2>() = 0b0011100111000000000000000000000000000000000000011100111;
+
+    // Big-endian: 10110110 10011100 11100000 00000000 00000000 00000000 00000000 11100111
+    // Big-endian field2 extract(): 00000000 00011100 11100000 00000000 00000000 00000000 00000000 11100111
+    REQUIRE(bf.extract<Reg::field1>() == 0b1000000010110110);
+    REQUIRE(bf.extract<Reg::field2>() == 0b1110011100000000000000000000000000000000111000000001110000000000);
 }
 
