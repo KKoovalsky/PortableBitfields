@@ -19,3 +19,5 @@
 * Implement extract().
 * Implement mask().
 * Test overflowing with at() and extract().
+* Test default zero-initialized.
+* Extract() test on one-byte bitfield shall be templated test case, with big_endian and little_endian DDT.
