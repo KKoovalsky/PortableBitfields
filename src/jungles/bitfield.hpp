@@ -32,9 +32,6 @@ struct Field
 template<std::integral UnderlyingType, ByteOrder ByteOrder_, auto... Fields>
 class Bitfield
 {
-  private:
-    static inline constexpr unsigned NumberOfFields{sizeof...(Fields)};
-
   public:
     template<auto FieldId>
     UnderlyingType& at()
@@ -49,7 +46,11 @@ class Bitfield
         constexpr auto idx{find_field_index<FieldId>()};
         constexpr auto shift{field_shifts[idx]};
         auto v{field_values[idx]};
-        return v << shift;
+        auto result{static_cast<UnderlyingType>(v << shift)};
+        if constexpr (ByteOrder_ == ByteOrder::big or UnderlyingTypeSize == 1)
+            return result;
+        else
+            return to_little_endian(result);
     }
 
   private:
@@ -92,6 +93,29 @@ class Bitfield
         static_assert(it != std::end(field_ids), "Field ID not found");
         return static_cast<unsigned>(std::distance(std::begin(field_ids), it));
     }
+
+    static inline constexpr auto to_little_endian(UnderlyingType big_endian_value)
+    {
+        constexpr auto underlying_type_byte_size{sizeof(UnderlyingType)};
+        constexpr auto underlying_type_bit_size{underlying_type_byte_size * 8};
+
+        UnderlyingType result{0};
+
+        auto in_shift{underlying_type_bit_size - 8};
+        auto out_shift{0};
+
+        for (unsigned i{0}; i < underlying_type_byte_size; ++i)
+        {
+            result |= ((big_endian_value >> in_shift) & 0xFF) << out_shift;
+            in_shift -= 8;
+            out_shift += 8;
+        }
+
+        return result;
+    }
+
+    static inline constexpr unsigned NumberOfFields{sizeof...(Fields)};
+    static inline constexpr unsigned UnderlyingTypeSize{sizeof(UnderlyingType)};
 
     static inline constexpr std::array fields{Fields...};
     static inline constexpr auto field_ids{to_field_ids()};

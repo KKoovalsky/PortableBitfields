@@ -22,7 +22,7 @@ enum class Reg
     field8
 };
 
-TEST_CASE("Extracts bitfields on one-byte long bitfield, for right-to-left field order", "[extract]")
+TEST_CASE("Extracts bitfields on one-byte long bitfield", "[extract]")
 {
     SECTION("For three fields, almost evenly aligned")
     {
@@ -103,8 +103,7 @@ TEST_CASE("Extracts bitfields on 4-byte long bitfield, big endian", "[extract]")
 {
     SECTION("For three fields, evenly aligned")
     {
-        Bitfield<uint32_t, ByteOrder::little, Field{Reg::field1, 11}, Field{Reg::field2, 11}, Field{Reg::field3, 10}>
-            bf;
+        Bitfield<uint32_t, ByteOrder::big, Field{Reg::field1, 11}, Field{Reg::field2, 11}, Field{Reg::field3, 10}> bf;
 
         bf.at<Reg::field1>() = 0b10101010101;
         bf.at<Reg::field2>() = 0b01101101100;
@@ -117,7 +116,7 @@ TEST_CASE("Extracts bitfields on 4-byte long bitfield, big endian", "[extract]")
 
     SECTION("For a two bit bitfield lying across two bytes")
     {
-        Bitfield<uint32_t, ByteOrder::little, Field{Reg::field1, 15}, Field{Reg::field2, 2}, Field{Reg::field3, 15}> bf;
+        Bitfield<uint32_t, ByteOrder::big, Field{Reg::field1, 15}, Field{Reg::field2, 2}, Field{Reg::field3, 15}> bf;
         bf.at<Reg::field1>() = 0b000001111100000;
         bf.at<Reg::field2>() = 0b11;
         bf.at<Reg::field3>() = 0b000001111100000;
@@ -128,9 +127,34 @@ TEST_CASE("Extracts bitfields on 4-byte long bitfield, big endian", "[extract]")
 
 TEST_CASE("Extracts bitfields on 4-byte long bitfield, little endian", "[extract]")
 {
+    SECTION("For three fields, evenly aligned")
+    {
+        Bitfield<uint32_t, ByteOrder::little, Field{Reg::field1, 11}, Field{Reg::field2, 11}, Field{Reg::field3, 10}>
+            bf;
+
+        bf.at<Reg::field1>() = 0b10101010101;
+        bf.at<Reg::field2>() = 0b01101101100;
+        bf.at<Reg::field3>() = 0b0111011110;
+
+        REQUIRE(bf.extract<Reg::field1>() == 0b00000000000000001010000010101010);
+        REQUIRE(bf.extract<Reg::field2>() == 0b00000000101100000000110100000000);
+        REQUIRE(bf.extract<Reg::field3>() == 0b11011110000000010000000000000000);
+    }
+
+    SECTION("For a two bit bitfield lying across two bytes")
+    {
+    }
+
+    SECTION("For four fields evenly aligned")
+    {
+    }
+
+    SECTION("For four fields unevenly aligned")
+    {
+    }
 }
 
-TEST_CASE("Extracts bitfields on 4-byte long bitfield, little endian", "[extract]")
+TEST_CASE("Extracts bitfields on 8-byte long bitfield, little endian", "[extract]")
 {
 }
 
