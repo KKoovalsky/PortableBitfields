@@ -34,14 +34,14 @@ class Bitfield
 {
   public:
     template<auto FieldId>
-    UnderlyingType& at()
+    constexpr UnderlyingType& at()
     {
         constexpr auto idx{find_field_index<FieldId>()};
         return field_values[idx];
     }
 
     template<auto FieldId>
-    UnderlyingType extract() const
+    constexpr UnderlyingType extract() const
     {
         constexpr auto idx{find_field_index<FieldId>()};
         constexpr auto shift{field_shifts[idx]};
