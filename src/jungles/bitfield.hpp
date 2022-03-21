@@ -53,6 +53,11 @@ class Bitfield
             return to_little_endian(result);
     }
 
+    constexpr UnderlyingType serialize() const
+    {
+        return (extract<Fields.id>() | ... | 0);
+    }
+
   private:
     static inline constexpr auto to_field_ids()
     {

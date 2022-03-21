@@ -23,6 +23,7 @@ macro (CreateRuntimeTests)
     add_executable(jungles_bitfield_runtime_tests
         test_operations_on_bitfields.cpp
         test_extracting.cpp
+        test_serializing.cpp
     )
     target_link_libraries(jungles_bitfield_runtime_tests PRIVATE Catch2::Catch2WithMain jungles::bitfield)
     target_compile_options(jungles_bitfield_runtime_tests PRIVATE -Wall -Wextra)
