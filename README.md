@@ -10,14 +10,11 @@
 
 # To test:
 
-* Works **only with** `enum class`, `enum`, integers ... as field ids.
+* Test compiles with ID types: enum class, enum, integer, std::string_view.
+* Document works with `enum class`, `enum`, integers ... or any other constexpr-capable type as field ids.
 * Static-assertion tests for missing field id.
 * Field ids can't duplicate.
 * Whole bitfield must be occupied (document how to implement padding with "reserved" fields).
-* Test bitfields spanning across multiple bytes.
-* Test bitfields aligned across multiple bytes, with weird spanning.
-* Implement extract().
-* Implement mask().
-* Test overflowing with at() and extract().
-* Test default zero-initialized.
+* Document how to get a mask().
 * Extract() test on one-byte bitfield shall be templated test case, with big_endian and little_endian DDT.
+* Test with clang.
