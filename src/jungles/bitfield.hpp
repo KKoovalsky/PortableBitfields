@@ -34,14 +34,14 @@ class Bitfield
 {
   public:
     template<auto FieldId>
-    constexpr UnderlyingType& at()
+    constexpr UnderlyingType& at() noexcept
     {
         constexpr auto idx{find_field_index<FieldId>()};
         return field_values[idx];
     }
 
     template<auto FieldId>
-    constexpr UnderlyingType extract() const
+    constexpr UnderlyingType extract() const noexcept
     {
         constexpr auto idx{find_field_index<FieldId>()};
         constexpr auto shift{field_shifts[idx]};
@@ -53,13 +53,13 @@ class Bitfield
             return to_little_endian(result);
     }
 
-    constexpr UnderlyingType serialize() const
+    constexpr UnderlyingType serialize() const noexcept
     {
         return (extract<Fields.id>() | ... | 0);
     }
 
   private:
-    static inline constexpr auto to_field_ids()
+    static inline constexpr auto to_field_ids() noexcept
     {
         using IdType = std::decay_t<decltype(std::decay_t<decltype(fields)>::value_type::id)>;
         std::array<IdType, NumberOfFields> ids;
@@ -67,14 +67,14 @@ class Bitfield
         return ids;
     }
 
-    static inline constexpr auto to_field_sizes()
+    static inline constexpr auto to_field_sizes() noexcept
     {
         std::array<unsigned, NumberOfFields> sizes;
         std::transform(std::begin(fields), std::end(fields), std::begin(sizes), [](auto f) { return f.size; });
         return sizes;
     }
 
-    static inline constexpr auto to_field_shifts()
+    static inline constexpr auto to_field_shifts() noexcept
     {
         std::array<unsigned, NumberOfFields> shifts;
 
@@ -92,14 +92,14 @@ class Bitfield
     }
 
     template<auto FieldId>
-    static inline constexpr auto find_field_index()
+    static inline constexpr auto find_field_index() noexcept
     {
         constexpr auto it{std::find(std::begin(field_ids), std::end(field_ids), FieldId)};
         static_assert(it != std::end(field_ids), "Field ID not found");
         return static_cast<unsigned>(std::distance(std::begin(field_ids), it));
     }
 
-    static inline constexpr auto to_little_endian(UnderlyingType big_endian_value)
+    static inline constexpr auto to_little_endian(UnderlyingType big_endian_value) noexcept
     {
         constexpr auto underlying_type_byte_size{sizeof(UnderlyingType)};
         constexpr auto underlying_type_bit_size{underlying_type_byte_size * 8};
