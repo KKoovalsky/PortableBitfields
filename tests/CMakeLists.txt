@@ -45,6 +45,7 @@ function(CompileTimePositiveTest name test_source_file)
         EXCLUDE_FROM_DEFAULT_BUILD TRUE)
 
     add_test(NAME ${name} COMMAND cmake --build . --target ${exec_name})
+    set_tests_properties(${name} PROPERTIES LABELS "Portable")
 
 endfunction()
 
@@ -67,6 +68,7 @@ function(CompileTimeNegativeTest name test_body pass_regex)
     add_test(NAME ${name} COMMAND 
         ${CMAKE_COMMAND} --build . --target ${exec_name} --config $<CONFIGURATION>)
     set_tests_properties(${name} PROPERTIES PASS_REGULAR_EXPRESSION ${pass_regex})
+    set_tests_properties(${name} PROPERTIES LABELS "Portable")
 
 endfunction()
 
