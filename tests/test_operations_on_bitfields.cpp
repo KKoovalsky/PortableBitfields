@@ -8,26 +8,15 @@
 
 #include "jungles/bitfield.hpp"
 
+#include "helpers.hpp"
+
 #include <cinttypes>
 
 using namespace jungles;
 
-enum class Reg
-{
-    field1,
-    field2,
-    field3,
-    field4
-};
-
 TEST_CASE("Operations on bitfields for one byte long bitfield", "[operations]")
 {
-    Bitfield<uint8_t,
-             ByteOrder::little,
-             Field{Reg::field1, 3},
-             Field{Reg::field2, 2},
-             Field{Reg::field3, 3}>
-        bf;
+    Bitfield<uint8_t, ByteOrder::little, Field{Reg::field1, 3}, Field{Reg::field2, 2}, Field{Reg::field3, 3}> bf;
 
     SECTION("Setting most-right field")
     {
@@ -58,12 +47,7 @@ TEST_CASE("Operations on bitfields for one byte long bitfield", "[operations]")
 
 TEST_CASE("Operations on bitfields for unsigned as underlying type", "[operations]")
 {
-    Bitfield<unsigned,
-             ByteOrder::little,
-             Field{Reg::field1, 30},
-             Field{Reg::field2, 1},
-             Field{Reg::field3, 1}>
-        bf;
+    Bitfield<unsigned, ByteOrder::little, Field{Reg::field1, 30}, Field{Reg::field2, 1}, Field{Reg::field3, 1}> bf;
 
     bf.at<Reg::field1>() = 0b11111111111111111111111111111;
     bf.at<Reg::field1>() &= ~0b00010000000000000000000000000;
@@ -72,12 +56,7 @@ TEST_CASE("Operations on bitfields for unsigned as underlying type", "[operation
 
 TEST_CASE("Operations on bitfields for 8-byte long bitfield", "[operations]")
 {
-    Bitfield<uint64_t,
-             ByteOrder::little,
-             Field{Reg::field1, 31},
-             Field{Reg::field2, 5},
-             Field{Reg::field3, 8}>
-        bf;
+    Bitfield<uint64_t, ByteOrder::little, Field{Reg::field1, 31}, Field{Reg::field2, 5}, Field{Reg::field3, 8}> bf;
 
     bf.at<Reg::field1>() = 0b1111111111111111111111111111111;
     bf.at<Reg::field1>() &= ~0b0100000000000000000000000000000;

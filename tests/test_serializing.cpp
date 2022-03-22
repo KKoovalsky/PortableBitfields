@@ -7,19 +7,9 @@
 
 #include "jungles/bitfield.hpp"
 
-using namespace jungles;
+#include "helpers.hpp"
 
-enum class Reg
-{
-    field1,
-    field2,
-    field3,
-    field4,
-    field5,
-    field6,
-    field7,
-    field8
-};
+using namespace jungles;
 
 TEST_CASE("One-byte-long bitfield group is serialized", "[serializing]")
 {
