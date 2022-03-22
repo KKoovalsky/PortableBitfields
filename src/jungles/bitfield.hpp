@@ -43,10 +43,7 @@ class Bitfield
     template<auto FieldId>
     constexpr UnderlyingType extract() const noexcept
     {
-        constexpr auto idx{find_field_index<FieldId>()};
-        constexpr auto shift{field_shifts[idx]};
-        auto v{field_values[idx]};
-        auto result{static_cast<UnderlyingType>(v << shift)};
+        auto result{extract_as_big_endian<FieldId>()};
         if constexpr (ByteOrder_ == ByteOrder::big or UnderlyingTypeSize == 1)
             return result;
         else
@@ -55,7 +52,11 @@ class Bitfield
 
     constexpr UnderlyingType serialize() const noexcept
     {
-        return (extract<Fields.id>() | ... | 0);
+        auto result{(extract_as_big_endian<Fields.id>() | ... | 0)};
+        if constexpr (ByteOrder_ == ByteOrder::big or UnderlyingTypeSize == 1)
+            return result;
+        else
+            return to_little_endian(result);
     }
 
   private:
@@ -116,6 +117,16 @@ class Bitfield
             out_shift += 8;
         }
 
+        return result;
+    }
+
+    template<auto FieldId>
+    constexpr UnderlyingType extract_as_big_endian() const noexcept
+    {
+        constexpr auto idx{find_field_index<FieldId>()};
+        constexpr auto shift{field_shifts[idx]};
+        auto v{field_values[idx]};
+        auto result{static_cast<UnderlyingType>(v << shift)};
         return result;
     }
 
