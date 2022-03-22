@@ -1,0 +1,15 @@
+/**
+ * @file	static_assertion_test.cpp.in
+ * @brief	Input file for configure_file() CMake command, to generate files for compile time testing.
+ * @author	Kacper Kowalski - kacper.s.kowalski@gmail.com
+ */
+
+#include "jungles/bitfield.hpp"
+
+using namespace jungles;
+
+int main()
+{
+    @JUNGLES_BITFIELD_STATIC_ASSERT_TEST_BODY@;
+    return 0;
+}

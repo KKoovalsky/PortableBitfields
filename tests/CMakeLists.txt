@@ -33,6 +33,28 @@ macro (CreateRuntimeTests)
 
 endmacro()
 
+function(CompileTimeNegativeTest name test_body pass_regex)
+
+    # Used within the *.in file
+    set(JUNGLES_BITFIELD_STATIC_ASSERT_TEST_BODY ${test_body})
+    set(output_file_name test_${name}.cpp)
+    configure_file(static_assertion_test.cpp.in ${output_file_name})
+
+    set(exec_name test_${name})
+    add_executable(${exec_name} ${output_file_name})
+
+    # target_include_directories(${exec_name} PRIVATE ${CMAKE_CURRENT_LIST_DIR})
+    target_link_libraries(${exec_name} PRIVATE jungles::bitfield)
+    set_target_properties(${exec_name} PROPERTIES 
+        EXCLUDE_FROM_ALL TRUE 
+        EXCLUDE_FROM_DEFAULT_BUILD TRUE)
+
+    add_test(NAME ${name} COMMAND 
+        ${CMAKE_COMMAND} --build . --target ${exec_name} --config $<CONFIGURATION>)
+    set_tests_properties(${name} PROPERTIES PASS_REGULAR_EXPRESSION ${pass_regex})
+
+endfunction()
+
 function(CreateCompileTimeTests)
 
     add_executable(various_id_types_compile_time_test test_various_id_types.cpp)
@@ -42,6 +64,16 @@ function(CreateCompileTimeTests)
         EXCLUDE_FROM_ALL TRUE 
         EXCLUDE_FROM_DEFAULT_BUILD TRUE)
     add_test(NAME various_id_types_compile_time COMMAND cmake --build . --target various_id_types_compile_time_test)
+
+    CompileTimeNegativeTest(
+        wrong_id_when_calling_at
+        "Bitfield<unsigned char, ByteOrder::big, Field{10, 3}, Field{20, 5}>{}.at<4>()"
+        ".*Field ID not found.*")
+
+    CompileTimeNegativeTest(
+        wrong_id_when_calling_extract
+        "Bitfield<unsigned char, ByteOrder::big, Field{3, 3}, Field{5, 5}>{}.extract<4>()"
+        ".*Field ID not found.*")
 
 endfunction()
 

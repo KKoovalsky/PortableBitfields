@@ -11,7 +11,6 @@
 # To test:
 
 * Document works with `enum class`, `enum`, integers ... or any other structural type, as field ids.
-* Static-assertion tests for missing field id.
 * Field ids can't duplicate.
 * Whole bitfield must be occupied (document how to implement padding with "reserved" fields).
 * Document how to get a mask().
