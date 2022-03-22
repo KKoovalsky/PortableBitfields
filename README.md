@@ -10,8 +10,7 @@
 
 # To test:
 
-* Test compiles with ID types: enum class, enum, integer, std::string_view.
-* Document works with `enum class`, `enum`, integers ... or any other constexpr-capable type as field ids.
+* Document works with `enum class`, `enum`, integers ... or any other structural type, as field ids.
 * Static-assertion tests for missing field id.
 * Field ids can't duplicate.
 * Whole bitfield must be occupied (document how to implement padding with "reserved" fields).
