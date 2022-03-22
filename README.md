@@ -10,8 +10,9 @@
 
 # To test:
 
+* Test with clang.
 * Document works with `enum class`, `enum`, integers ... or any other structural type, as field ids.
 * Document how to implement padding using "reserved" fields, when one doesn't want to occupy the whole field.
 * Document how to get a mask().
-* Extract() test on one-byte bitfield shall be templated test case, with big_endian and little_endian DDT.
-* Test with clang.
+* PROBLEM WITH CATCH2: any test with one-byte-long bitfield group, shall be templated test case, with big endian and 
+little endian configuration.
