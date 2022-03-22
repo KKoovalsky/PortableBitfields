@@ -37,7 +37,9 @@ class Bitfield
     constexpr UnderlyingType& at() noexcept
     {
         constexpr auto idx{find_field_index<FieldId>()};
-        return field_values[idx];
+        auto& result{field_values[idx]};
+        result &= non_shifted_field_masks[idx];
+        return result;
     }
 
     template<auto FieldId>
@@ -86,6 +88,23 @@ class Bitfield
         return shifts;
     }
 
+    static inline constexpr auto to_non_shifted_field_masks() noexcept
+    {
+        std::array<UnderlyingType, NumberOfFields> field_masks;
+
+        for (unsigned i{0}; i < NumberOfFields; ++i)
+        {
+            auto field_size{static_cast<UnderlyingType>(field_sizes[i])};
+            // Funny! This is needed, because if we write: (1 << field_size) compiler will use type 'int' for one,
+            // and shifting (int << uint64_t) is undefined behavior; see:
+            // https://stackoverflow.com/questions/10499104/is-shifting-more-than-32-bits-of-a-uint64-t-integer-on-an-x86-machine-undefined#answer-10499371
+            auto one{static_cast<UnderlyingType>(1)};
+            field_masks[i] = (one << field_size) - 1;
+        }
+
+        return field_masks;
+    }
+
     template<auto FieldId>
     static inline constexpr auto find_field_index() noexcept
     {
@@ -119,7 +138,8 @@ class Bitfield
     {
         constexpr auto idx{find_field_index<FieldId>()};
         constexpr auto shift{field_shifts[idx]};
-        auto v{field_values[idx]};
+        constexpr auto mask{non_shifted_field_masks[idx]};
+        auto v{field_values[idx] & mask};
         auto result{static_cast<UnderlyingType>(v << shift)};
         return result;
     }
@@ -139,6 +159,7 @@ class Bitfield
     static inline constexpr auto field_ids{to_field_ids()};
     static inline constexpr auto field_sizes{to_field_sizes()};
     static inline constexpr auto field_shifts{to_field_shifts()};
+    static inline constexpr auto non_shifted_field_masks{to_non_shifted_field_masks()};
 
     std::array<UnderlyingType, NumberOfFields> field_values = {};
 };
