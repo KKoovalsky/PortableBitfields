@@ -44,19 +44,13 @@ class Bitfield
     constexpr UnderlyingType extract() const noexcept
     {
         auto result{extract_as_big_endian<FieldId>()};
-        if constexpr (ByteOrder_ == ByteOrder::big or UnderlyingTypeSize == 1)
-            return result;
-        else
-            return to_little_endian(result);
+        return fix_endianness(result);
     }
 
     constexpr UnderlyingType serialize() const noexcept
     {
         auto result{(extract_as_big_endian<Fields.id>() | ... | 0)};
-        if constexpr (ByteOrder_ == ByteOrder::big or UnderlyingTypeSize == 1)
-            return result;
-        else
-            return to_little_endian(result);
+        return fix_endianness(result);
     }
 
   private:
@@ -128,6 +122,14 @@ class Bitfield
         auto v{field_values[idx]};
         auto result{static_cast<UnderlyingType>(v << shift)};
         return result;
+    }
+
+    static inline constexpr UnderlyingType fix_endianness(UnderlyingType value) noexcept
+    {
+        if constexpr (ByteOrder_ == ByteOrder::big or UnderlyingTypeSize == 1)
+            return value;
+        else
+            return to_little_endian(value);
     }
 
     static inline constexpr unsigned NumberOfFields{sizeof...(Fields)};
