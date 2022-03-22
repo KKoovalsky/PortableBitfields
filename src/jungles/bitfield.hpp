@@ -152,6 +152,20 @@ class Bitfield
             return to_little_endian(value);
     }
 
+    static inline constexpr bool has_duplicates()
+    {
+        auto beg{std::begin(field_ids)}, end{std::end(field_ids)};
+
+        for (auto it{beg}; it != end; ++it)
+        {
+            auto match_it{std::find(std::next(it), end, *it)};
+            if (match_it != end)
+                return true;
+        }
+
+        return false;
+    }
+
     static inline constexpr unsigned NumberOfFields{sizeof...(Fields)};
     static inline constexpr unsigned UnderlyingTypeSize{sizeof(UnderlyingType)};
 
@@ -160,6 +174,8 @@ class Bitfield
     static inline constexpr auto field_sizes{to_field_sizes()};
     static inline constexpr auto field_shifts{to_field_shifts()};
     static inline constexpr auto non_shifted_field_masks{to_non_shifted_field_masks()};
+
+    static_assert(not has_duplicates(), "Field IDs must not duplicate");
 
     std::array<UnderlyingType, NumberOfFields> field_values = {};
 };

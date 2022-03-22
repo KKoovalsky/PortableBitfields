@@ -11,8 +11,8 @@
 # To test:
 
 * Document works with `enum class`, `enum`, integers ... or any other structural type, as field ids.
-* Field ids can't duplicate.
-* Whole bitfield must be occupied (document how to implement padding with "reserved" fields).
+* Whole bitfield must be occupied.
+* Document how to implement padding using "reserved" fields, when one doesn't want to occupy the whole field.
 * Document how to get a mask().
 * Extract() test on one-byte bitfield shall be templated test case, with big_endian and little_endian DDT.
 * Test with clang.

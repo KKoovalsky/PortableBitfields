@@ -80,8 +80,13 @@ function(CreateCompileTimeTests)
 
     CompileTimeNegativeTest(
         wrong_id_when_calling_extract
-        "Bitfield<unsigned char, ByteOrder::big, Field{3, 3}, Field{5, 5}>{}.extract<4>()"
+        "Bitfield<unsigned char, ByteOrder::big, Field{5, 3}, Field{3, 5}>{}.extract<4>()"
         ".*Field ID not found.*")
+
+    CompileTimeNegativeTest(
+        ids_must_not_duplicate
+        "Bitfield<unsigned char, ByteOrder::big, Field{10, 3}, Field{10, 5}>{}"
+        ".*Field IDs must not duplicate.*")
 
 endfunction()
 
