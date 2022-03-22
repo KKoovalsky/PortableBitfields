@@ -88,6 +88,16 @@ function(CreateCompileTimeTests)
         "Bitfield<unsigned char, ByteOrder::big, Field{10, 3}, Field{10, 5}>{}"
         ".*Field IDs must not duplicate.*")
 
+    CompileTimeNegativeTest(
+        bits_not_occupied
+        "Bitfield<unsigned char, ByteOrder::big, Field{0, 3}, Field{10, 4}>{}"
+        ".*Accumulated bit size is not equal to underlying type's bit size.*")
+
+    CompileTimeNegativeTest(
+        bitfield_group_doesnt_fit
+        "Bitfield<unsigned char, ByteOrder::big, Field{0, 5}, Field{10, 4}>{}"
+        ".*Accumulated bit size is not equal to underlying type's bit size.*")
+
 endfunction()
 
 ################################################################################

@@ -11,6 +11,7 @@
 #include <concepts>
 #include <cstdint>
 #include <iterator>
+#include <numeric>
 #include <type_traits>
 
 namespace jungles
@@ -166,8 +167,14 @@ class Bitfield
         return false;
     }
 
+    static inline constexpr unsigned calculate_occupied_bit_size()
+    {
+        return std::accumulate(std::begin(field_sizes), std::end(field_sizes), 0u);
+    }
+
     static inline constexpr unsigned NumberOfFields{sizeof...(Fields)};
     static inline constexpr unsigned UnderlyingTypeSize{sizeof(UnderlyingType)};
+    static inline constexpr unsigned UnderlyingTypeBitSize{UnderlyingTypeSize * 8};
 
     static inline constexpr std::array fields{Fields...};
     static inline constexpr auto field_ids{to_field_ids()};
@@ -176,6 +183,8 @@ class Bitfield
     static inline constexpr auto non_shifted_field_masks{to_non_shifted_field_masks()};
 
     static_assert(not has_duplicates(), "Field IDs must not duplicate");
+    static_assert(calculate_occupied_bit_size() == UnderlyingTypeBitSize,
+                  "Accumulated bit size is not equal to underlying type's bit size");
 
     std::array<UnderlyingType, NumberOfFields> field_values = {};
 };

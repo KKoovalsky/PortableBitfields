@@ -56,7 +56,7 @@ TEST_CASE("Operations on bitfields for unsigned as underlying type", "[operation
 
 TEST_CASE("Operations on bitfields for 8-byte long bitfield", "[operations]")
 {
-    Bitfield<uint64_t, ByteOrder::little, Field{Reg::field1, 31}, Field{Reg::field2, 5}, Field{Reg::field3, 8}> bf;
+    Bitfield<uint64_t, ByteOrder::little, Field{Reg::field1, 31}, Field{Reg::field2, 5}, Field{Reg::field3, 28}> bf;
 
     bf.at<Reg::field1>() = 0b1111111111111111111111111111111;
     bf.at<Reg::field1>() &= ~0b0100000000000000000000000000000;
