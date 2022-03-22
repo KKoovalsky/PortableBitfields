@@ -33,6 +33,20 @@ macro (CreateRuntimeTests)
 
 endmacro()
 
+function(CompileTimePositiveTest name test_source_file)
+
+    set(exec_name test_${name})
+    add_executable(${exec_name} ${test_source_file})
+    target_link_libraries(${exec_name} PRIVATE jungles::bitfield)
+    target_compile_options(${exec_name} PRIVATE -Wall -Wextra)
+    set_target_properties(${exec_name} PROPERTIES 
+        EXCLUDE_FROM_ALL TRUE 
+        EXCLUDE_FROM_DEFAULT_BUILD TRUE)
+
+    add_test(NAME ${name} COMMAND cmake --build . --target ${exec_name})
+
+endfunction()
+
 function(CompileTimeNegativeTest name test_body pass_regex)
 
     # Used within the *.in file
@@ -57,13 +71,7 @@ endfunction()
 
 function(CreateCompileTimeTests)
 
-    add_executable(various_id_types_compile_time_test test_various_id_types.cpp)
-    target_link_libraries(various_id_types_compile_time_test PRIVATE jungles::bitfield)
-    target_compile_options(various_id_types_compile_time_test PRIVATE -Wall -Wextra)
-    set_target_properties(various_id_types_compile_time_test PROPERTIES 
-        EXCLUDE_FROM_ALL TRUE 
-        EXCLUDE_FROM_DEFAULT_BUILD TRUE)
-    add_test(NAME various_id_types_compile_time COMMAND cmake --build . --target various_id_types_compile_time_test)
+    CompileTimePositiveTest(various_id_types test_various_id_types.cpp)
 
     CompileTimeNegativeTest(
         wrong_id_when_calling_at
