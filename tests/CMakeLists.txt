@@ -103,10 +103,37 @@ function(CreateCompileTimeTests)
 
 endfunction()
 
+function(CreatePortabilityTests)
+
+    ProvideLlvm13(llvm_path)
+
+    add_test(
+        NAME build_with_clang13
+        COMMAND ctest --build-and-test ${CMAKE_SOURCE_DIR} ${CMAKE_BINARY_DIR}/clang13_build
+                      --build-generator ${CMAKE_GENERATOR}
+                      --build-options -DLLVM_TOOLCHAIN_PATH=${llvm_path}
+                                      -DCMAKE_TOOLCHAIN_FILE=${CMAKE_CURRENT_LIST_DIR}/llvm_toolchain_file.cmake
+                                      -DCMAKE_BUILD_TYPE=Release
+                                      -DJUNGLES_BITFIELD_ENABLE_TESTING=ON
+                                      -DJUNGLES_BITFIELD_ENABLE_PORTABILITY_TESTS=OFF
+    )
+
+    set_tests_properties(build_with_clang13 PROPERTIES LABELS "Ubuntu20")
+
+endfunction()
+
 ################################################################################
 # Main script
 ################################################################################
 
+include(dependencies.cmake)
+
 DownloadAndPopulateCatch2()
 CreateRuntimeTests()
 CreateCompileTimeTests()
+
+option(JUNGLES_BITFIELD_ENABLE_PORTABILITY_TESTS "Includes portability tests" OFF)
+
+if(JUNGLES_BITFIELD_ENABLE_PORTABILITY_TESTS)
+    CreatePortabilityTests()
+endif()
