@@ -16,7 +16,7 @@ endmacro()
 # Main script
 ################################################################################
 
-project(JunglesBitfield)
+project(JunglesBitfield LANGUAGES C CXX)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
