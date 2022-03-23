@@ -5,7 +5,7 @@
  */
 #include <catch2/catch_test_macros.hpp>
 
-#include "jungles/bitfield.hpp"
+#include "jungles/bitfields.hpp"
 
 #include "helpers.hpp"
 
@@ -15,7 +15,7 @@ TEST_CASE("Overflows are not affecting other fields", "[overflow]")
 {
     SECTION("Overflowing operation truncates the value")
     {
-        Bitfield<uint16_t, ByteOrder::big, Field{Reg::field1, 2}, Field{Reg::field2, 8}, Field{Reg::field3, 6}> bf;
+        Bitfields<uint16_t, ByteOrder::big, Field{Reg::field1, 2}, Field{Reg::field2, 8}, Field{Reg::field3, 6}> bf;
 
         bf.at<Reg::field2>() = 0xFFF;
 
@@ -39,7 +39,7 @@ TEST_CASE("Overflows are not affecting other fields", "[overflow]")
     {
         SECTION("Two bit bitfield, occupying bits by the border of two bytes")
         {
-            Bitfield<uint16_t, ByteOrder::big, Field{Reg::field1, 7}, Field{Reg::field2, 2}, Field{Reg::field3, 7}> bf;
+            Bitfields<uint16_t, ByteOrder::big, Field{Reg::field1, 7}, Field{Reg::field2, 2}, Field{Reg::field3, 7}> bf;
             bf.at<Reg::field1>() = 0b111000000;
             bf.at<Reg::field2>() = 0b101;
             bf.at<Reg::field3>() = 0b111100000;
@@ -48,7 +48,7 @@ TEST_CASE("Overflows are not affecting other fields", "[overflow]")
 
         SECTION("One-bit-long bitfield")
         {
-            Bitfield<uint32_t, ByteOrder::big, Field{Reg::field1, 17}, Field{Reg::field2, 1}, Field{Reg::field3, 14}>
+            Bitfields<uint32_t, ByteOrder::big, Field{Reg::field1, 17}, Field{Reg::field2, 1}, Field{Reg::field3, 14}>
                 bf;
             bf.at<Reg::field1>() = 0b111000000;
             bf.at<Reg::field2>() = 0b11110;
@@ -58,7 +58,7 @@ TEST_CASE("Overflows are not affecting other fields", "[overflow]")
 
         SECTION("Evenly aligned three bitfields over four-byte-long bitfield")
         {
-            Bitfield<uint32_t, ByteOrder::big, Field{Reg::field1, 10}, Field{Reg::field2, 11}, Field{Reg::field3, 11}>
+            Bitfields<uint32_t, ByteOrder::big, Field{Reg::field1, 10}, Field{Reg::field2, 11}, Field{Reg::field3, 11}>
                 bf;
             bf.at<Reg::field1>() = 0b111111000000;
             bf.at<Reg::field2>() = 0b11111110010101001;

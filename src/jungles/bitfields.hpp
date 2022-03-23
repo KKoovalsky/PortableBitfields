@@ -1,10 +1,10 @@
 /**
- * @file        bitfield.hpp
+ * @file        bitfields.hpp
  * @brief       Bitfield library implementation.
  * @author      Kacper Kowalski - kacper.s.kowalski@gmail.com
  */
-#ifndef BITFIELD_HPP
-#define BITFIELD_HPP
+#ifndef BITFIELDS_HPP
+#define BITFIELDS_HPP
 
 #include <algorithm>
 #include <array>
@@ -35,7 +35,7 @@ struct Field
 };
 
 template<std::integral UnderlyingType, ByteOrder ByteOrder_, auto... Fields>
-class Bitfield
+class Bitfields
 {
   public:
     template<auto FieldId>
@@ -195,4 +195,4 @@ class Bitfield
 
 } // namespace jungles
 
-#endif /* BITFIELD_HPP */
+#endif /* BITFIELDS_HPP */

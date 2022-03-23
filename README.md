@@ -6,7 +6,6 @@
 * overflow policy: allow, throw, clear field,
 * straddling: types of single bitfields is different than underlying type
 * document: defined alignment, padding, field ordering
-* rename Bitfield to BitfieldGroup
 
 # To test:
 

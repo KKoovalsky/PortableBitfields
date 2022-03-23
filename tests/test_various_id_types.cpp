@@ -3,7 +3,7 @@
  * @brief	Creates bitfields with various ID types, to check whether it compiles.
  * @author	Kacper Kowalski - kacper.s.kowalski@gmail.com
  */
-#include "jungles/bitfield.hpp"
+#include "jungles/bitfields.hpp"
 
 using namespace jungles;
 
@@ -17,11 +17,11 @@ int main(void)
             EnumVal3
         };
 
-        Bitfield<uint8_t, ByteOrder::big, Field{EnumVal1, 2}, Field{EnumVal2, 3}, Field{EnumVal3, 3}>{};
+        Bitfields<uint8_t, ByteOrder::big, Field{EnumVal1, 2}, Field{EnumVal2, 3}, Field{EnumVal3, 3}>{};
     }};
 
     auto compile_int_as_id{[]() {
-        Bitfield<uint8_t, ByteOrder::big, Field{10, 2}, Field{20, 3}, Field{30, 3}>{};
+        Bitfields<uint8_t, ByteOrder::big, Field{10, 2}, Field{20, 3}, Field{30, 3}>{};
     }};
 
     auto compile_enum_class_as_id{[]() {
@@ -32,7 +32,7 @@ int main(void)
             V3
         };
 
-        Bitfield<uint8_t,
+        Bitfields<uint8_t,
                  ByteOrder::big,
                  Field{SomeEnumClass::V1, 2},
                  Field{SomeEnumClass::V2, 3},

@@ -4,7 +4,7 @@
  * @author	Kacper Kowalski - kacper.s.kowalski@gmail.com
  */
 
-#include "jungles/bitfield.hpp"
+#include "jungles/bitfields.hpp"
 
 using namespace jungles;
 

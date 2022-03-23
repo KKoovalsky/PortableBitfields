@@ -5,7 +5,7 @@
  */
 #include <catch2/catch_test_macros.hpp>
 
-#include "jungles/bitfield.hpp"
+#include "jungles/bitfields.hpp"
 
 #include "helpers.hpp"
 
@@ -15,7 +15,7 @@ TEST_CASE("Extracts bitfields on one-byte long bitfield", "[extract]")
 {
     SECTION("For three fields, almost evenly aligned")
     {
-        Bitfield<uint8_t, ByteOrder::little, Field{Reg::field1, 3}, Field{Reg::field2, 2}, Field{Reg::field3, 3}> bf;
+        Bitfields<uint8_t, ByteOrder::little, Field{Reg::field1, 3}, Field{Reg::field2, 2}, Field{Reg::field3, 3}> bf;
 
         bf.at<Reg::field1>() = 0b101;
         bf.at<Reg::field2>() = 0b11;
@@ -28,7 +28,7 @@ TEST_CASE("Extracts bitfields on one-byte long bitfield", "[extract]")
 
     SECTION("For four fields, with various sizes")
     {
-        Bitfield<uint8_t,
+        Bitfields<uint8_t,
                  ByteOrder::little,
                  Field{Reg::field1, 1},
                  Field{Reg::field2, 4},
@@ -49,7 +49,7 @@ TEST_CASE("Extracts bitfields on one-byte long bitfield", "[extract]")
 
     SECTION("For each field having size one")
     {
-        Bitfield<uint8_t,
+        Bitfields<uint8_t,
                  ByteOrder::little,
                  Field{Reg::field1, 1},
                  Field{Reg::field2, 1},
@@ -82,7 +82,7 @@ TEST_CASE("Extracts bitfields on one-byte long bitfield", "[extract]")
 
     SECTION("For one field, occupying the whole bitfield")
     {
-        Bitfield<uint8_t, ByteOrder::little, Field{Reg::field1, 8}> bf;
+        Bitfields<uint8_t, ByteOrder::little, Field{Reg::field1, 8}> bf;
         bf.at<Reg::field1>() = 0b10010110;
         REQUIRE(bf.extract<Reg::field1>() == 0b10010110);
     }
@@ -92,7 +92,7 @@ TEST_CASE("Extracts bitfields on 4-byte long bitfield, big endian", "[extract]")
 {
     SECTION("For three fields, evenly aligned")
     {
-        Bitfield<uint32_t, ByteOrder::big, Field{Reg::field1, 11}, Field{Reg::field2, 11}, Field{Reg::field3, 10}> bf;
+        Bitfields<uint32_t, ByteOrder::big, Field{Reg::field1, 11}, Field{Reg::field2, 11}, Field{Reg::field3, 10}> bf;
 
         bf.at<Reg::field1>() = 0b10101010101;
         bf.at<Reg::field2>() = 0b01101101100;
@@ -105,7 +105,7 @@ TEST_CASE("Extracts bitfields on 4-byte long bitfield, big endian", "[extract]")
 
     SECTION("For a two bit bitfield lying across two bytes")
     {
-        Bitfield<uint32_t, ByteOrder::big, Field{Reg::field1, 15}, Field{Reg::field2, 2}, Field{Reg::field3, 15}> bf;
+        Bitfields<uint32_t, ByteOrder::big, Field{Reg::field1, 15}, Field{Reg::field2, 2}, Field{Reg::field3, 15}> bf;
         bf.at<Reg::field1>() = 0b000001111100000;
         bf.at<Reg::field2>() = 0b11;
         bf.at<Reg::field3>() = 0b000001111100000;
@@ -118,7 +118,7 @@ TEST_CASE("Extracts bitfields on 4-byte long bitfield, little endian", "[extract
 {
     SECTION("For three fields, evenly aligned")
     {
-        Bitfield<uint32_t, ByteOrder::little, Field{Reg::field1, 11}, Field{Reg::field2, 11}, Field{Reg::field3, 10}>
+        Bitfields<uint32_t, ByteOrder::little, Field{Reg::field1, 11}, Field{Reg::field2, 11}, Field{Reg::field3, 10}>
             bf;
 
         bf.at<Reg::field1>() = 0b10101010101;
@@ -132,7 +132,7 @@ TEST_CASE("Extracts bitfields on 4-byte long bitfield, little endian", "[extract
 
     SECTION("For a two bit bitfield lying across two bytes")
     {
-        Bitfield<uint32_t, ByteOrder::little, Field{Reg::field1, 15}, Field{Reg::field2, 2}, Field{Reg::field3, 15}> bf;
+        Bitfields<uint32_t, ByteOrder::little, Field{Reg::field1, 15}, Field{Reg::field2, 2}, Field{Reg::field3, 15}> bf;
 
         bf.at<Reg::field1>() = 0b000001111100000;
         bf.at<Reg::field2>() = 0b11;
@@ -143,7 +143,7 @@ TEST_CASE("Extracts bitfields on 4-byte long bitfield, little endian", "[extract
 
     SECTION("For four fields evenly aligned")
     {
-        Bitfield<uint32_t,
+        Bitfields<uint32_t,
                  ByteOrder::little,
                  Field{Reg::field1, 8},
                  Field{Reg::field2, 8},
@@ -164,7 +164,7 @@ TEST_CASE("Extracts bitfields on 4-byte long bitfield, little endian", "[extract
 
     SECTION("For four fields unevenly aligned")
     {
-        Bitfield<uint32_t,
+        Bitfields<uint32_t,
                  ByteOrder::little,
                  Field{Reg::field1, 9},
                  Field{Reg::field2, 7},
@@ -190,7 +190,7 @@ TEST_CASE("Extracts bitfields on 4-byte long bitfield, little endian", "[extract
 
 TEST_CASE("Extracts bitfields on 8-byte long bitfield, little endian", "[extract]")
 {
-    Bitfield<uint64_t, ByteOrder::little, Field{Reg::field1, 9}, Field{Reg::field2, 55}> bf;
+    Bitfields<uint64_t, ByteOrder::little, Field{Reg::field1, 9}, Field{Reg::field2, 55}> bf;
     bf.at<Reg::field1>() = 0b101101101;
     bf.at<Reg::field2>() = 0b0011100111000000000000000000000000000000000000011100111;
 
