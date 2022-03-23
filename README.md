@@ -10,6 +10,7 @@
 
 # To test:
 
+* Document works with GCC11 and Clang13.
 * Document works with `enum class`, `enum`, integers ... or any other structural type, as field ids.
 * Document how to implement padding using "reserved" fields, when one doesn't want to occupy the whole field.
 * Document how to get a mask().
