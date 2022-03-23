@@ -26,6 +26,10 @@ enum class ByteOrder
 template<typename IdType>
 struct Field
 {
+    explicit constexpr Field(IdType id, unsigned size) : id{id}, size{size}
+    {
+    }
+
     const IdType id;
     const unsigned size;
 };
