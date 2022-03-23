@@ -7,7 +7,7 @@ Implements serialization of the bitfields, and this is the main objective of thi
 ## Features
 
 * Overflow and out-of-range defined bevaviour: least significant bits of the value are masked to fit into the bitfield.
-* Bitfields are packed left-to-right, in the same order there are defined.
+* Bitfields are packed left-to-right, in the same order they are defined.
 * Choice of endianness.
 * Bitfields are packed, thus straddling is supported.
 * Configurable padding, by enforcing whole underlying type allocation.
@@ -37,9 +37,22 @@ using UnderlyingType = uint16_t;
 using Register = Bitfields<
     UnderlyingType, 
     ByteOrder::big,
-    Field{.id = Id::f1, .size = 3}, // Has also explicit constructor, so this is equivalent: Field{Id::f1, 3}
+    Field{.id = Id::f1, .size = 3}, // Has also an explicit constructor, so
+                                    // this is equivalent: 
+                                    // Field{Id::f1, 3}
     Field{.id = Id::f2, .size = 9}, 
     Field{.id = Id::f3, .size = 4}>; 
+
+```
+
+The `UnderlyingType` will be occupied by the single fields like that:
+
+```
+f1 = X
+f2 = Y
+f3 = Z
+
+XXXYYYYYYYYYZZZZ - 16 bits in total, because uint16_t has bit-size equal to 16
 
 ```
 
