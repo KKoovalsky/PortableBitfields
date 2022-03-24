@@ -189,6 +189,25 @@ bool MP2695::is_usb_plugged_in()
 
 ## Installation
 
+1. Copy the contents of `src` directory and use the header stright away, by including `jungles/bitfields.hpp` header.
+Remember the `-std=c++20` flag!.
+2. Use `FetchContent` CMake module:
+
+```
+include(FetchContent)
+
+FetchContent_Declare(
+    JunglesBitfields
+    GIT_REPOSITORY https://github.com/KKoovalsky/PortableBitfields.git
+    # GIT_TAG <Some relevant SHA>
+)
+
+FetchContent_MakeAvailable(JunglesBitfields)
+
+# Use 'jungles::bitfield' library target
+
+```
+
 ## Interface
 
 ### at()
@@ -338,7 +357,6 @@ approximately.
 
 1. Implement to `std::array` serialization.
 2. Allow underlying type `std::array`.
-configuration. This doesn't work due to compilation error from Catch2.
 3. Allow `install` target.
 4. Turn above todos into issues.
 5. Create ToC.
