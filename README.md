@@ -191,9 +191,41 @@ bool MP2695::is_usb_plugged_in()
 
 #### at()
 
+```
+template<auto Id>
+UnderlyingType& at();
+```
+
+Returns reference to the field under the specified `Id`. One can use any integral-compatible operation on it: 
+arithmetic, bitwise, logic, ... operations. Use it to access the specific field: mutate the value, assign new one,
+retrieve it as an r-value.
+
+See [operations test](tests/test_operations_on_bitfields.cpp) for usage examples.
+
 #### serialize()
 
+```
+UnderlyingType serialize() const
+```
+
+Returns serialized bitfields, in the left-to-right order (the same as defined with `Bitfields` template).
+
+See [serialization test](tests/test_serializing.cpp) for usage examples.
+
 #### extract()
+
+```
+template<auto Id>
+UnderlyingType extract() const;
+```
+
+Returns the bitfield with applied shift, with all of the other bitfields cleared. Is equivalent to operation:
+
+```
+field value << field shift
+```
+
+See [extraction test](tests/test_extracting.cpp) for usage examples.
 
 ### Constraints, expected behaviour, tips and other notes
 
@@ -232,9 +264,8 @@ Use "reserved" fields.
 
 # Todos:
 
-1. Implement bitfield loading from already serialized value.
-2. Implement to `std::array` serialization.
-3. Allow underlying type `std::array`.
+1. Implement to `std::array` serialization.
+2. Allow underlying type `std::array`.
 configuration. This doesn't work due to compilation error from Catch2.
-4. Turn above todos into issues.
-5. Create ToC.
+3. Turn above todos into issues.
+4. Create ToC.
