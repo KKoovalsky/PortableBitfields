@@ -2,7 +2,7 @@
 
 This is a C++20 portable bitfields header-only library with defined behaviour, in the contrary to the standard. 
 This library intends to strictly define the behaviour, which the standard leaves for the compilers to 
-define. Implements serialization of the bitfields, and this is the main objective of this library.
+define. Implements serialization and deserialization of the bitfields, and this is the main objective of this library.
 
 Examples of usage:
 
@@ -16,7 +16,7 @@ Examples of usage:
 * Bitfields are packed left-to-right, in the same order they are defined.
 * Bitfields are packed, thus straddling is supported.
 * Configurable padding, by enforcing whole underlying type allocation.
-* Implements bitfield serialization amd extraction of a single bitfield's value, with proper shifting.
+* Implements bitfield serialization, deserialization and extraction of a single bitfield's value, with proper shifting.
 * C++20.
 * Tested with GCC 11.1 and Clang 13.0.0.
 * Supports bitfield groups total length up to 8 bytes.
@@ -74,7 +74,7 @@ struct RegisterWithRawBitfields
 Use the bitfields:
 
 ```
-Register r;
+Register r; // Default zero-initialized.
 r.at<Id::f1>() = 0b101;
 r.at<Id::f2>() = 0b001111100;
 r.at<Id::f3>() = 0b0110;
@@ -91,6 +91,16 @@ ASSERT(r.extract<Id::f3>() == 0b0000000000000110);
 
 ASSERT(r.serialize() == 0b1010011111000110);
 
+```
+
+Deserialize:
+
+```
+Register r{0b0101110001110110};
+//           XXXYYYYYYYYYZZZZ
+ASSERT(r.at<Id::f1>() == 0b010);
+ASSERT(r.at<Id::f2>() == 0b111000111);
+ASSERT(r.at<Id::f3>() == 0b0110);
 ```
 
 ### Example use case #1: RTP header's first word
