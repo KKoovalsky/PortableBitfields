@@ -187,9 +187,11 @@ bool MP2695::is_usb_plugged_in()
 }
 ```
 
-### Interface
+## Installation
 
-#### at()
+## Interface
+
+### at()
 
 ```
 template<auto Id>
@@ -202,7 +204,7 @@ retrieve it as an r-value.
 
 See [operations test](tests/test_operations_on_bitfields.cpp) for usage examples.
 
-#### serialize()
+### serialize()
 
 ```
 UnderlyingType serialize() const
@@ -212,7 +214,7 @@ Returns serialized bitfields, in the left-to-right order (the same as defined wi
 
 See [serialization test](tests/test_serializing.cpp) for usage examples.
 
-#### extract()
+### extract()
 
 ```
 template<auto Id>
@@ -227,27 +229,87 @@ field value << field shift
 
 See [extraction test](tests/test_extracting.cpp) for usage examples.
 
-### Constraints, expected behaviour, tips and other notes
+## Constraints, expected behaviour, tips and other notes
 
-#### 1. Overflow, or out-of-range
+### 1. Overflow, or out-of-range
 
-#### 2. Field ID type
+When assigning value out of range or overflowing the bitfield value, the least significant bits are masked to fit into
+the bitfield, e.g.:
 
-* Field ID types must be the same for each field.
+```
+using Register = Bitfields<
+    uint8_t, 
+    Field{.id = Id::f1, .size = 3},
+    Field{.id = Id::f2, .size = 5}>; 
+
+Register r;
+
+r.at<Id::f2>() += 2;
+r.at<Id::f2>() += 2;
+
+ASSERT(r.at<Id::f1>() == 0b1);
+
+r.at<Id::f2>() = 0b11111011;
+ASSERT(r.at<Id::f2>() == 0b11011);
+```
+
+### 2. Field ID type
+
+* Field ID types must be the same for each field. Compilation error occurs otherwise.
 * Supported types are integral types, enum classes, enums, or other "structural" type.
 
 #### 3. Field ID
 
-* Field IDs must not duplicate.
-* Accessing non-existing field ID is an error.
+* Field IDs must not duplicate; static assertion error goes off otherwise.
+* Accessing non-existing field ID is a static assertion error. 
 
 #### 4. Field sizes
 
+All the bits within the underlying type must be allocated. If the accumulated bit size is not equal to the underlying
+type's bit size, then a static assertion will shoot.
+
 #### 5. Padding
 
-Use "reserved" fields.
+To handle padding use "reserved" fields. Since, all of the bits must be allocated, one can control whether underlying
+value shall be padded left or right:
+
+```
+enum class Id
+{
+    f1, f2, reserved
+};
+
+using namespace jungles;
+
+using RightAlignedRegister = Bitfields<
+    uint8_t,
+    Field{Id::reserved, 4},
+    Field{Id::f1, 6},
+    Field{Id::reserved, 6}>;
+
+using LeftAlignedRegister = Bitfields<
+    uint8_t,
+    Field{Id::f1, 6},
+    Field{Id::reserved, 6},
+    Field{Id::reserved, 4}>;
+```
 
 #### 6. Mask
+
+To get a field mask, create a bitfield with all bitfields assigned to "ones":
+
+```
+using namespace jungles;
+
+using Register = Bitfields<
+    uint16_t, 
+    Field{.id = Id::f1, .size = 5}, 
+    Field{.id = Id::f2, .size = 7}, 
+    Field{.id = Id::f3, .size = 4}>; 
+
+Register r{std::numeric_limits<uint16_t>::max()};
+ASSERT(r.extract<Id::f2>() == 0b0000011111110000);
+```
 
 # Testing
 
@@ -267,5 +329,6 @@ Use "reserved" fields.
 1. Implement to `std::array` serialization.
 2. Allow underlying type `std::array`.
 configuration. This doesn't work due to compilation error from Catch2.
-3. Turn above todos into issues.
-4. Create ToC.
+3. Allow `install` target.
+4. Turn above todos into issues.
+5. Create ToC.
