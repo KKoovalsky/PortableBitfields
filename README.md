@@ -1,6 +1,6 @@
 # Portable Bitfields C++ library
 
-This is a C++20 portable bitfields header-only library with defined behaviour, in the contrary to the standard. 
+This is a C++20 cross-platform bitfields header-only library, with defined behaviour, in the contrary to the standard. 
 This library intends to strictly define the behaviour, which the standard leaves for the compilers to 
 define. Implements serialization and deserialization of the bitfields, and this is the main objective of this library.
 
@@ -342,7 +342,7 @@ cmake --build .
 To enable testing, set `JUNGLES_BITFIELD_ENABLE_TESTING` CMake cache variable.
 
 There is also portability test, which downloads Clang 13.0.0 for Ubuntu 20.04, and runs the complete build and test
-with this compiler. To enable it, set `JUNGLES_BITFIELD_ENABLE_PORTABILITY_TESTS`. This takes long too run, few minutes
+with this compiler. To enable it, set `JUNGLES_BITFIELD_ENABLE_PORTABILITY_TESTS`. This takes long to run - few minutes
 approximately.
 
 ## To research:
