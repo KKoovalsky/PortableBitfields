@@ -4,6 +4,7 @@
  * @author      Kacper Kowalski - kacper.s.kowalski@gmail.com
  */
 #include <catch2/catch_test_macros.hpp>
+#include <limits>
 
 #include "jungles/bitfields.hpp"
 
@@ -49,5 +50,15 @@ TEST_CASE("Fields are deserialized/loaded", "[desieralization]")
         REQUIRE(bf.at<Reg::field1>() == 0b00100);
         REQUIRE(bf.at<Reg::field2>() == 0b1100011);
         REQUIRE(bf.at<Reg::field3>() == 0b0110);
+    }
+
+    SECTION("Getting mask")
+    {
+        Bitfields<uint16_t, Field{Reg::field1, 7}, Field{Reg::field2, 5}, Field{Reg::field3, 4}> bf{
+            std::numeric_limits<uint16_t>::max()};
+
+        REQUIRE(bf.extract<Reg::field1>() == 0b1111111000000000);
+        REQUIRE(bf.extract<Reg::field2>() == 0b0000000111110000);
+        REQUIRE(bf.extract<Reg::field3>() == 0b0000000000001111);
     }
 }
