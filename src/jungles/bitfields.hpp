@@ -17,12 +17,6 @@
 namespace jungles
 {
 
-enum class ByteOrder
-{
-    big,
-    little
-};
-
 template<typename IdType>
 struct Field
 {
@@ -34,7 +28,7 @@ struct Field
     const unsigned size;
 };
 
-template<std::integral UnderlyingType, ByteOrder ByteOrder_, auto... Fields>
+template<std::integral UnderlyingType, auto... Fields>
 class Bitfields
 {
   public:
@@ -50,14 +44,17 @@ class Bitfields
     template<auto FieldId>
     constexpr UnderlyingType extract() const noexcept
     {
-        auto result{extract_as_big_endian<FieldId>()};
-        return fix_endianness(result);
+        constexpr auto idx{find_field_index<FieldId>()};
+        constexpr auto shift{field_shifts[idx]};
+        constexpr auto mask{non_shifted_field_masks[idx]};
+        auto v{field_values[idx] & mask};
+        auto result{static_cast<UnderlyingType>(v << shift)};
+        return result;
     }
 
     constexpr UnderlyingType serialize() const noexcept
     {
-        auto result{(extract_as_big_endian<Fields.id>() | ... | 0)};
-        return fix_endianness(result);
+        return (extract<Fields.id>() | ... | 0);
     }
 
   private:
@@ -116,45 +113,6 @@ class Bitfields
         constexpr auto it{std::find(std::begin(field_ids), std::end(field_ids), FieldId)};
         static_assert(it != std::end(field_ids), "Field ID not found");
         return static_cast<unsigned>(std::distance(std::begin(field_ids), it));
-    }
-
-    static inline constexpr auto to_little_endian(UnderlyingType big_endian_value) noexcept
-    {
-        constexpr auto underlying_type_byte_size{sizeof(UnderlyingType)};
-        constexpr auto underlying_type_bit_size{underlying_type_byte_size * 8};
-
-        UnderlyingType result{0};
-
-        auto in_shift{underlying_type_bit_size - 8};
-        auto out_shift{0};
-
-        for (unsigned i{0}; i < underlying_type_byte_size; ++i)
-        {
-            result |= ((big_endian_value >> in_shift) & 0xFF) << out_shift;
-            in_shift -= 8;
-            out_shift += 8;
-        }
-
-        return result;
-    }
-
-    template<auto FieldId>
-    constexpr UnderlyingType extract_as_big_endian() const noexcept
-    {
-        constexpr auto idx{find_field_index<FieldId>()};
-        constexpr auto shift{field_shifts[idx]};
-        constexpr auto mask{non_shifted_field_masks[idx]};
-        auto v{field_values[idx] & mask};
-        auto result{static_cast<UnderlyingType>(v << shift)};
-        return result;
-    }
-
-    static inline constexpr UnderlyingType fix_endianness(UnderlyingType value) noexcept
-    {
-        if constexpr (ByteOrder_ == ByteOrder::big or UnderlyingTypeSize == 1)
-            return value;
-        else
-            return to_little_endian(value);
     }
 
     static inline constexpr bool has_duplicates()

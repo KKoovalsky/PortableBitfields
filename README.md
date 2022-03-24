@@ -1,19 +1,19 @@
 # Portable Bitfields C++ library
 
-This is a C++20 portable bitfields header-only library, endian-configurable and with defined behaviour, in the contrary 
-to the standard. This library intends to strictly define the behaviour, which the standard leaves for the compilers to 
+This is a C++20 portable bitfields header-only library with defined behaviour, in the contrary to the standard. 
+This library intends to strictly define the behaviour, which the standard leaves for the compilers to 
 define. Implements serialization of the bitfields, and this is the main objective of this library.
 
 Examples of usage:
 
 * Accessing single bits of registers in ICs, from which the data is obtained through I2C, SPI, UART, ...
 * Protocol headers.
+* ...
 
 ## Features
 
 * Overflow and out-of-range defined bevaviour: least significant bits of the value are masked to fit into the bitfield.
 * Bitfields are packed left-to-right, in the same order they are defined.
-* Choice of endianness.
 * Bitfields are packed, thus straddling is supported.
 * Configurable padding, by enforcing whole underlying type allocation.
 * Implements bitfield serialization amd extraction of a single bitfield's value, with proper shifting.
@@ -42,7 +42,6 @@ using namespace jungles;
 using UnderlyingType = uint16_t;
 using Register = Bitfields<
     UnderlyingType, 
-    ByteOrder::big,
     Field{.id = Id::f1, .size = 3}, // Has also an explicit constructor, so
                                     // this is equivalent: 
                                     // Field{Id::f1, 3}
@@ -105,7 +104,6 @@ enum class RtpHeaderField
 using namespace jungles;
 using RtpHeaderFirstWord = Bitfields<
     uint32_t,
-    ByteOrder::big,
     Field{RtpHeaderField::version,              2},
     Field{RtpHeaderField::padding,              1},
     Field{RtpHeaderField::extension,            1},
@@ -128,7 +126,6 @@ enum class FrameFormatFields
 using namespace jungles;
 using ZclFrameFormat = Bitfields,
     uint32_t,
-    ByteOrder::big,
     Field{FrameFormatFields::frame_type,               2},
     Field{FrameFormatFields::manufacturer_specific,    1},
     Field{FrameFormatFields::direction,                1},
@@ -197,18 +194,16 @@ Use "reserved" fields.
 # To research:
 
 1. Configurable field ordering, e.g. allow right-to-left field ordering.
-2. Switching endianness at runtime useful?
-3. If Ad.1 legit, then switching ordering at runtime useful?
-4. Configurable overflow policies, e.g. allow, throw, clear field, etc.
-5. Would it be useful, if the type of a single field could be different than the underlying type of the bitfield group?
-6. Would it be useful, if the types of the field IDs wouldn't have to be the same?
+2. If Ad.1 legit, then switching ordering at runtime useful?
+3. Configurable overflow policies, e.g. allow, throw, clear field, etc.
+4. Would it be useful, if the type of a single field could be different than the underlying type of the bitfield group?
+5. Would it be useful, if the types of the field IDs wouldn't have to be the same?
 
 # Todos:
 
 1. Implement bitfield loading from already serialized value.
 2. Implement to `std::array` serialization.
 3. Allow underlying type `std::array`.
-4. Any test with one-byte-long bitfield group, shall be templated test case, with big endian and  little endian 
 configuration. This doesn't work due to compilation error from Catch2.
-5. Turn above todos into issues.
-6. Create ToC.
+4. Turn above todos into issues.
+5. Create ToC.

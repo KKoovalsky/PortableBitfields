@@ -11,8 +11,8 @@
 
 using namespace jungles;
 
-TEST_CASE("Bitfieldss are zero-initialized", "[misc]")
+TEST_CASE("Bitfields are zero-initialized", "[misc]")
 {
-    Bitfields<uint16_t, ByteOrder::little, Field{Reg::field1, 1}, Field{Reg::field2, 1}, Field{Reg::field3, 14}> bf;
+    Bitfields<uint16_t, Field{Reg::field1, 1}, Field{Reg::field2, 1}, Field{Reg::field3, 14}> bf;
     REQUIRE(bf.serialize() == 0);
 }
