@@ -32,6 +32,19 @@ template<std::integral UnderlyingType, auto... Fields>
 class Bitfields
 {
   public:
+    constexpr Bitfields() = default;
+
+    constexpr Bitfields(UnderlyingType preload)
+    {
+        for (unsigned i{0}; i < NumberOfFields; ++i)
+        {
+            auto mask{field_masks[i]};
+            auto masked_value{mask & preload};
+            auto shift{field_shifts[i]};
+            field_values[i] = masked_value >> shift;
+        }
+    }
+
     template<auto FieldId>
     constexpr UnderlyingType& at() noexcept
     {
@@ -107,6 +120,20 @@ class Bitfields
         return field_masks;
     }
 
+    static inline constexpr auto to_shifted_field_masks() noexcept
+    {
+        std::array<UnderlyingType, NumberOfFields> masks;
+
+        for (unsigned i{0}; i < NumberOfFields; ++i)
+        {
+            auto mask{non_shifted_field_masks[i]};
+            auto shift{field_shifts[i]};
+            masks[i] = mask << shift;
+        }
+
+        return masks;
+    }
+
     template<auto FieldId>
     static inline constexpr auto find_field_index() noexcept
     {
@@ -143,6 +170,7 @@ class Bitfields
     static inline constexpr auto field_sizes{to_field_sizes()};
     static inline constexpr auto field_shifts{to_field_shifts()};
     static inline constexpr auto non_shifted_field_masks{to_non_shifted_field_masks()};
+    static inline constexpr auto field_masks{to_shifted_field_masks()};
 
     static_assert(not has_duplicates(), "Field IDs must not duplicate");
     static_assert(calculate_occupied_bit_size() == UnderlyingTypeBitSize,

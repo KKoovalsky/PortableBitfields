@@ -24,7 +24,7 @@ macro (CreateRuntimeTests)
         test_operations_on_bitfields.cpp
         test_extracting.cpp
         test_serializing.cpp
-        test_zero_initialized.cpp
+        test_deserializing.cpp
         test_overflow.cpp
     )
     target_link_libraries(jungles_bitfield_runtime_tests PRIVATE Catch2::Catch2WithMain jungles::bitfield)
