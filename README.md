@@ -258,17 +258,17 @@ ASSERT(r.at<Id::f2>() == 0b11011);
 * Field ID types must be the same for each field. Compilation error occurs otherwise.
 * Supported types are integral types, enum classes, enums, or other "structural" type.
 
-#### 3. Field ID
+### 3. Field ID
 
 * Field IDs must not duplicate; static assertion error goes off otherwise.
 * Accessing non-existing field ID is a static assertion error. 
 
-#### 4. Field sizes
+### 4. Field sizes
 
 All the bits within the underlying type must be allocated. If the accumulated bit size is not equal to the underlying
 type's bit size, then a static assertion will shoot.
 
-#### 5. Padding
+### 5. Padding
 
 To handle padding use "reserved" fields. Since, all of the bits must be allocated, one can control whether underlying
 value shall be padded left or right:
@@ -294,7 +294,7 @@ using LeftAlignedRegister = Bitfields<
     Field{Id::reserved, 4}>;
 ```
 
-#### 6. Mask
+### 6. Mask
 
 To get a field mask, create a bitfield with all bitfields assigned to "ones":
 
@@ -311,12 +311,22 @@ Register r{std::numeric_limits<uint16_t>::max()};
 ASSERT(r.extract<Id::f2>() == 0b0000011111110000);
 ```
 
-# Testing
+## Building and testing
 
-`JUNGLES_BITFIELD_ENABLE_TESTING`
-`JUNGLES_BITFIELD_ENABLE_PORTABILITY_TESTS` - makes it slow
+Building:
 
-# To research:
+```
+cmake -DCMAKE_BUILD_TYPE=Release ..
+cmake --build .
+```
+
+To enable testing, set `JUNGLES_BITFIELD_ENABLE_TESTING` CMake cache variable.
+
+There is also portability test, which downloads Clang 13.0.0 for Ubuntu 20.04, and runs the complete build and test
+with this compiler. To enable it, set `JUNGLES_BITFIELD_ENABLE_PORTABILITY_TESTS`. This takes long too run, few minutes
+approximately.
+
+## To research:
 
 1. Configurable field ordering, e.g. allow right-to-left field ordering.
 2. If Ad.1 legit, then switching ordering at runtime useful?
@@ -324,7 +334,7 @@ ASSERT(r.extract<Id::f2>() == 0b0000011111110000);
 4. Would it be useful, if the type of a single field could be different than the underlying type of the bitfield group?
 5. Would it be useful, if the types of the field IDs wouldn't have to be the same?
 
-# Todos:
+## Todos:
 
 1. Implement to `std::array` serialization.
 2. Allow underlying type `std::array`.
