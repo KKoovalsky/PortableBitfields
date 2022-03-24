@@ -1,8 +1,13 @@
 # Portable Bitfields C++ library
 
-This is a C++20 portable bitfields library, endian-configurable and with defined behaviour, in the contrary to the
-standard. This library intends to strictly define the behaviour, which the standard leaves for the compilers to define.
-Implements serialization of the bitfields, and this is the main objective of this library.
+This is a C++20 portable bitfields header-only library, endian-configurable and with defined behaviour, in the contrary 
+to the standard. This library intends to strictly define the behaviour, which the standard leaves for the compilers to 
+define. Implements serialization of the bitfields, and this is the main objective of this library.
+
+Examples of usage:
+
+* Accessing single bits of registers in ICs, from which the data is obtained through I2C, SPI, UART, ...
+* Protocol headers.
 
 ## Features
 
@@ -14,6 +19,7 @@ Implements serialization of the bitfields, and this is the main objective of thi
 * Implements bitfield serialization amd extraction of a single bitfield's value, with proper shifting.
 * C++20.
 * Tested with GCC 11.1 and Clang 13.0.0.
+* Supports bitfield groups total length up to 8 bytes.
 
 ## Usage
 
@@ -28,7 +34,7 @@ enum class Id
 };
 ```
 
-Define bitfield type;
+Define bitfield type:
 
 ```
 using namespace jungles;
@@ -53,7 +59,6 @@ f2 = Y
 f3 = Z
 
 XXXYYYYYYYYYZZZZ - 16 bits in total, because uint16_t has bit-size equal to 16
-
 ```
 
 The above code shall emulate a structure like this:
@@ -89,11 +94,70 @@ ASSERT(r.serialize() == 0b1010011111000110);
 
 ```
 
-### Use case #1: some simple TCP/IP protocol header
+### Example use case #1: RTP header's first word
 
-### Use case #2: some CAN, MODBUS, BLE, Thread, ZigBee header
+```
+enum class RtpHeaderField
+{
+    version, padding, extension, csrc_count, marker, payload_type, sequence_number
+};
 
-### Use case #3: MP2695 Status register
+using namespace jungles;
+using RtpHeaderFirstWord = Bitfields<
+    uint32_t,
+    ByteOrder::big,
+    Field{RtpHeaderField::version,              2},
+    Field{RtpHeaderField::padding,              1},
+    Field{RtpHeaderField::extension,            1},
+    Field{RtpHeaderField::csrc_count,           4},
+    Field{RtpHeaderField::marker,               1},
+    Field{RtpHeaderField::payload_type,         7},
+    Field{RtpHeaderField::sequence_number,      16}>;
+
+RtpHeaderFirstWord rtp_header_first_word;
+```
+
+### Example use case #2: Zigbee ZCL header field Frame Format
+
+```
+enum class FrameFormatFields
+{
+    frame_type, manufacturer_specific, direction, disable_default_response, reserved
+};
+
+using namespace jungles;
+using ZclFrameFormat = Bitfields,
+    uint32_t,
+    ByteOrder::big,
+    Field{FrameFormatFields::frame_type,               2},
+    Field{FrameFormatFields::manufacturer_specific,    1},
+    Field{FrameFormatFields::direction,                1},
+    Field{FrameFormatFields::disable_default_response, 1},
+    Field{FrameFormatFields::reserved,                 2}>;
+```
+
+### Example use case #3: IC MP2695 Status register
+
+```
+enum class StatusField
+{
+    reserved1 = 0,
+    chg_stat,
+    vppm_stat,
+    ippm_stat,
+    usb1_plug_in,
+    reserved2
+};
+
+using namespace jungles;
+using Status = Bitfields<uint8_t, 
+                         Field{StatusField::reserved1,    2}, 
+                         Field{StatusField::chg_stat,     2},
+                         Field{StatusField::vppm_stat,    1},
+                         Field{StatusField::ippm_stat,    1},
+                         Field{StatusField::usb1_plug_in, 1},
+                         Field{StatusField::reserved2,    1}>;
+```
 
 ### Interface
 
@@ -141,9 +205,10 @@ Use "reserved" fields.
 
 # Todos:
 
-1. Implement to `std::array` serialization.
-2. Allow underlying type `std::array`.
-3. Any test with one-byte-long bitfield group, shall be templated test case, with big endian and  little endian 
+1. Implement bitfield loading from already serialized value.
+2. Implement to `std::array` serialization.
+3. Allow underlying type `std::array`.
+4. Any test with one-byte-long bitfield group, shall be templated test case, with big endian and  little endian 
 configuration. This doesn't work due to compilation error from Catch2.
-4. Turn above todos into issues.
-5. Create ToC.
+5. Turn above todos into issues.
+6. Create ToC.
