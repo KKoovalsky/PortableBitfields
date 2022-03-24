@@ -122,7 +122,11 @@ using RtpHeaderFirstWord = Bitfields<
     Field{RtpHeaderField::payload_type,         7},
     Field{RtpHeaderField::sequence_number,      16}>;
 
-RtpHeaderFirstWord rtp_header_first_word;
+// ...
+std::vector<uint32_t> rtp_header{get_from_external_world_over_network()};
+
+// Will automatically assign field values (deserialize).
+RtpHeaderFirstWord rtp_header_first_word{rtp_header[0]};
 ```
 
 ### Example use case #2: Zigbee ZCL header field Frame Format
@@ -164,6 +168,23 @@ using Status = Bitfields<uint8_t,
                          Field{StatusField::ippm_stat,    1},
                          Field{StatusField::usb1_plug_in, 1},
                          Field{StatusField::reserved2,    1}>;
+
+```
+
+One can utlize the library in such a way:
+
+```
+bool MP2695::is_usb_plugged_in()
+{
+    // Read the register over the wire
+    uint8_t status_register_address{0x05};
+    auto raw_value{mp2695_on_i2c_interface.read(status_register_address)}; // Depends on your implementation.
+
+    // Initialize our Status register with the obtained data. It will map to proper bitfields.
+    Status status_reg{raw_value}; 
+    
+    return status_reg.at<status::usb1_plug_in>() == 1;
+}
 ```
 
 ### Interface
