@@ -42,9 +42,9 @@ using namespace jungles;
 using UnderlyingType = uint16_t;
 using Register = Bitfields<
     UnderlyingType, 
-    Field<.id = Id::f1, .size = 3>,
-    Field<.id = Id::f2, .size = 9>, 
-    Field<.id = Id::f3, .size = 4>>; 
+    Field<Id::f1, 3>, // <Id, Bit-size>
+    Field<Id::f2, 9>, 
+    Field<Id::f3, 4>>; 
 
 ```
 
@@ -256,8 +256,8 @@ the bitfield, e.g.:
 ```
 using Register = Bitfields<
     uint8_t, 
-    Field<.id = Id::f1, .size = 3>,
-    Field<.id = Id::f2, .size = 5>>; 
+    Field<Id::f1, 3>,
+    Field<Id::f2, 5>>; 
 
 Register r;
 
@@ -320,9 +320,9 @@ using namespace jungles;
 
 using Register = Bitfields<
     uint16_t, 
-    Field<.id = Id::f1, .size = 5>, 
-    Field<.id = Id::f2, .size = 7>, 
-    Field<.id = Id::f3, .size = 4>>; 
+    Field<Id::f1, 5>, 
+    Field<Id::f2, 7>, 
+    Field<Id::f3, 4>>; 
 
 Register r{std::numeric_limits<uint16_t>::max()};
 ASSERT(r.extract<Id::f2>() == 0b0000011111110000);
