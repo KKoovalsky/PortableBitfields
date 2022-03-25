@@ -17,11 +17,11 @@ int main(void)
             EnumVal3
         };
 
-        Bitfields<uint8_t, Field{EnumVal1, 2}, Field{EnumVal2, 3}, Field{EnumVal3, 3}>{};
+        Bitfields<uint8_t, Field<EnumVal1, 2>, Field<EnumVal2, 3>, Field<EnumVal3, 3>>{};
     }};
 
     auto compile_int_as_id{[]() {
-        Bitfields<uint8_t, Field{10, 2}, Field{20, 3}, Field{30, 3}>{};
+        Bitfields<uint8_t, Field<10, 2>, Field<20, 3>, Field<30, 3>>{};
     }};
 
     auto compile_enum_class_as_id{[]() {
@@ -32,7 +32,7 @@ int main(void)
             V3
         };
 
-        Bitfields<uint8_t, Field{SomeEnumClass::V1, 2}, Field{SomeEnumClass::V2, 3}, Field{SomeEnumClass::V3, 3}>{};
+        Bitfields<uint8_t, Field<SomeEnumClass::V1, 2>, Field<SomeEnumClass::V2, 3>, Field<SomeEnumClass::V3, 3>>{};
     }};
 
     compile_enum_as_id();

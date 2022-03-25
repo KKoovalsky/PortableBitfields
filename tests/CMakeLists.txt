@@ -78,27 +78,27 @@ function(CreateCompileTimeTests)
 
     CompileTimeNegativeTest(
         wrong_id_when_calling_at
-        "Bitfields<unsigned char, Field{10, 3}, Field{20, 5}>{}.at<4>()"
+        "Bitfields<unsigned char, Field<10, 3>, Field<20, 5>>{}.at<4>()"
         ".*Field ID not found.*")
 
     CompileTimeNegativeTest(
         wrong_id_when_calling_extract
-        "Bitfields<unsigned char, Field{5, 3}, Field{3, 5}>{}.extract<4>()"
+        "Bitfields<unsigned char, Field<5, 3>, Field<3, 5>>{}.extract<4>()"
         ".*Field ID not found.*")
 
     CompileTimeNegativeTest(
         ids_must_not_duplicate
-        "Bitfields<unsigned char, Field{10, 3}, Field{10, 5}>{}"
+        "Bitfields<unsigned char, Field<10, 3>, Field<10, 5>>{}"
         ".*Field IDs must not duplicate.*")
 
     CompileTimeNegativeTest(
         bits_not_occupied
-        "Bitfields<unsigned char, Field{0, 3}, Field{10, 4}>{}"
+        "Bitfields<unsigned char, Field<0, 3>, Field<10, 4>>{}"
         ".*Accumulated bit size is not equal to underlying type's bit size.*")
 
     CompileTimeNegativeTest(
         bitfield_group_doesnt_fit
-        "Bitfields<unsigned char, Field{0, 5}, Field{10, 4}>{}"
+        "Bitfields<unsigned char, Field<0, 5>, Field<10, 4>>{}"
         ".*Accumulated bit size is not equal to underlying type's bit size.*")
 
 endfunction()
