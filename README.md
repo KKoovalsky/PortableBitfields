@@ -17,6 +17,7 @@ Examples of usage:
 * Bitfields are packed, thus straddling is supported.
 * Configurable padding, by enforcing whole underlying type allocation.
 * Implements bitfield serialization, deserialization and extraction of a single bitfield's value, with proper shifting.
+* No dynamic allocation (aka use of new/malloc).
 * C++17.
 * Tested with GCC 11.1 and Clang 13.0.0.
 * Supports bitfield groups total length up to 8 bytes.
