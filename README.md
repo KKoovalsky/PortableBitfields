@@ -1,6 +1,6 @@
 # Portable Bitfields C++ library
 
-This is a C++20 cross-platform bitfields header-only library, with defined behaviour, in the contrary to the standard. 
+This is a C++17 cross-platform bitfields header-only library, with defined behaviour, in the contrary to the standard. 
 This library intends to strictly define the behaviour, which the standard leaves for the compilers to 
 define. Implements serialization and deserialization of the bitfields, and this is the main objective of this library.
 
@@ -17,7 +17,7 @@ Examples of usage:
 * Bitfields are packed, thus straddling is supported.
 * Configurable padding, by enforcing whole underlying type allocation.
 * Implements bitfield serialization, deserialization and extraction of a single bitfield's value, with proper shifting.
-* C++20.
+* C++17.
 * Tested with GCC 11.1 and Clang 13.0.0.
 * Supports bitfield groups total length up to 8 bytes.
 
@@ -42,11 +42,9 @@ using namespace jungles;
 using UnderlyingType = uint16_t;
 using Register = Bitfields<
     UnderlyingType, 
-    Field{.id = Id::f1, .size = 3}, // Has also an explicit constructor, so
-                                    // this is equivalent: 
-                                    // Field{Id::f1, 3}
-    Field{.id = Id::f2, .size = 9}, 
-    Field{.id = Id::f3, .size = 4}>; 
+    Field<.id = Id::f1, .size = 3>,
+    Field<.id = Id::f2, .size = 9>, 
+    Field<.id = Id::f3, .size = 4>>; 
 
 ```
 
@@ -114,13 +112,13 @@ enum class RtpHeaderField
 using namespace jungles;
 using RtpHeaderFirstWord = Bitfields<
     uint32_t,
-    Field{RtpHeaderField::version,              2},
-    Field{RtpHeaderField::padding,              1},
-    Field{RtpHeaderField::extension,            1},
-    Field{RtpHeaderField::csrc_count,           4},
-    Field{RtpHeaderField::marker,               1},
-    Field{RtpHeaderField::payload_type,         7},
-    Field{RtpHeaderField::sequence_number,      16}>;
+    Field<RtpHeaderField::version,              2>,
+    Field<RtpHeaderField::padding,              1>,
+    Field<RtpHeaderField::extension,            1>,
+    Field<RtpHeaderField::csrc_count,           4>,
+    Field<RtpHeaderField::marker,               1>,
+    Field<RtpHeaderField::payload_type,         7>,
+    Field<RtpHeaderField::sequence_number,      16>>;
 
 // ...
 std::vector<uint32_t> rtp_header{get_from_external_world_over_network()};
@@ -140,11 +138,11 @@ enum class FrameFormatFields
 using namespace jungles;
 using ZclFrameFormat = Bitfields,
     uint32_t,
-    Field{FrameFormatFields::frame_type,               2},
-    Field{FrameFormatFields::manufacturer_specific,    1},
-    Field{FrameFormatFields::direction,                1},
-    Field{FrameFormatFields::disable_default_response, 1},
-    Field{FrameFormatFields::reserved,                 2}>;
+    Field<FrameFormatFields::frame_type,               2>,
+    Field<FrameFormatFields::manufacturer_specific,    1>,
+    Field<FrameFormatFields::direction,                1>,
+    Field<FrameFormatFields::disable_default_response, 1>,
+    Field<FrameFormatFields::reserved,                 2>>;
 ```
 
 ### Example use case #3: IC MP2695 Status register
@@ -162,12 +160,12 @@ enum class StatusField
 
 using namespace jungles;
 using Status = Bitfields<uint8_t, 
-                         Field{StatusField::reserved1,    2}, 
-                         Field{StatusField::chg_stat,     2},
-                         Field{StatusField::vppm_stat,    1},
-                         Field{StatusField::ippm_stat,    1},
-                         Field{StatusField::usb1_plug_in, 1},
-                         Field{StatusField::reserved2,    1}>;
+                         Field<StatusField::reserved1,    2>, 
+                         Field<StatusField::chg_stat,     2>,
+                         Field<StatusField::vppm_stat,    1>,
+                         Field<StatusField::ippm_stat,    1>,
+                         Field<StatusField::usb1_plug_in, 1>,
+                         Field<StatusField::reserved2,    1>>;
 
 ```
 
@@ -258,8 +256,8 @@ the bitfield, e.g.:
 ```
 using Register = Bitfields<
     uint8_t, 
-    Field{.id = Id::f1, .size = 3},
-    Field{.id = Id::f2, .size = 5}>; 
+    Field<.id = Id::f1, .size = 3>,
+    Field<.id = Id::f2, .size = 5>>; 
 
 Register r;
 
@@ -302,15 +300,15 @@ using namespace jungles;
 
 using RightAlignedRegister = Bitfields<
     uint8_t,
-    Field{Id::reserved, 4},
-    Field{Id::f1, 6},
-    Field{Id::reserved, 6}>;
+    Field<Id::reserved, 4>,
+    Field<Id::f1, 6>,
+    Field<Id::reserved, 6>>;
 
 using LeftAlignedRegister = Bitfields<
     uint8_t,
-    Field{Id::f1, 6},
-    Field{Id::reserved, 6},
-    Field{Id::reserved, 4}>;
+    Field<Id::f1, 6>,
+    Field<Id::reserved, 6>,
+    Field<Id::reserved, 4>>;
 ```
 
 ### 6. Mask
@@ -322,9 +320,9 @@ using namespace jungles;
 
 using Register = Bitfields<
     uint16_t, 
-    Field{.id = Id::f1, .size = 5}, 
-    Field{.id = Id::f2, .size = 7}, 
-    Field{.id = Id::f3, .size = 4}>; 
+    Field<.id = Id::f1, .size = 5>, 
+    Field<.id = Id::f2, .size = 7>, 
+    Field<.id = Id::f3, .size = 4>>; 
 
 Register r{std::numeric_limits<uint16_t>::max()};
 ASSERT(r.extract<Id::f2>() == 0b0000011111110000);
