@@ -32,8 +32,8 @@ Examples of usage:
   * [5. Padding](#5-padding)
   * [6. Mask](#6-mask)
 - [Building and testing](#building-and-testing)
-- [To research:](#to-research)
-- [Todos:](#todos)
+- [To research](#to-research)
+- [Todos](#todos)
 
 ## Features
 
@@ -372,7 +372,7 @@ There is also portability test, which downloads Clang 13.0.0 for Ubuntu 20.04, a
 with this compiler. To enable it, set `JUNGLES_BITFIELD_ENABLE_PORTABILITY_TESTS`. This takes long to run - few minutes
 approximately.
 
-## To research:
+## To research
 
 1. Configurable field ordering, e.g. allow right-to-left field ordering.
 2. If Ad.1 legit, then switching ordering at runtime useful?
@@ -380,7 +380,7 @@ approximately.
 4. Would it be useful, if the type of a single field could be different than the underlying type of the bitfield group?
 5. Would it be useful, if the types of the field IDs wouldn't have to be the same?
 
-## Todos:
+## Todos
 
 1. Implement to `std::array` serialization.
 2. Allow underlying type `std::array`.
