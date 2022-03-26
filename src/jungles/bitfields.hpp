@@ -10,6 +10,7 @@
 #include <cstdint>
 #include <iterator>
 #include <type_traits>
+#include <climits>
 
 namespace jungles
 {
@@ -178,7 +179,7 @@ class Bitfields
 
     static inline constexpr unsigned NumberOfFields{sizeof...(Fields)};
     static inline constexpr unsigned UnderlyingTypeSize{sizeof(UnderlyingType)};
-    static inline constexpr unsigned UnderlyingTypeBitSize{UnderlyingTypeSize * 8};
+    static inline constexpr unsigned UnderlyingTypeBitSize{UnderlyingTypeSize * CHAR_BIT};
 
     static inline constexpr std::array field_ids{Fields::id...};
     static inline constexpr std::array field_sizes{Fields::size...};
