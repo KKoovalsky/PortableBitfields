@@ -10,6 +10,31 @@ Examples of usage:
 * Protocol headers.
 * ...
 
+## Contents
+
+- [Features](#features)
+- [Why use this library?](#why-use-this-library)
+- [Usage](#usage)
+  * [Basic usage](#basic-usage)
+  * [Example use case #1: RTP header's first word](#example-use-case-%231-rtp-headers-first-word)
+  * [Example use case #2: Zigbee ZCL header field Frame Format](#example-use-case-%232-zigbee-zcl-header-field-frame-format)
+  * [Example use case #3: IC MP2695 Status register](#example-use-case-%233-ic-mp2695-status-register)
+- [Installation](#installation)
+- [Interface](#interface)
+  * [at()](#at)
+  * [serialize()](#serialize)
+  * [extract()](#extract)
+- [Constraints, expected behaviour, tips and other notes](#constraints-expected-behaviour-tips-and-other-notes)
+  * [1. Overflow, or out-of-range](#1-overflow-or-out-of-range)
+  * [2. Field ID type](#2-field-id-type)
+  * [3. Field ID](#3-field-id)
+  * [4. Field sizes](#4-field-sizes)
+  * [5. Padding](#5-padding)
+  * [6. Mask](#6-mask)
+- [Building and testing](#building-and-testing)
+- [To research:](#to-research)
+- [Todos:](#todos)
+
 ## Features
 
 * Overflow and out-of-range defined bevaviour: least significant bits of the value are masked to fit into the bitfield.
@@ -22,6 +47,8 @@ Examples of usage:
 * C++17.
 * Tested with GCC 11.1 and Clang 13.0.0.
 * Supports bitfield groups total length up to 8 bytes.
+
+## Why use this library?
 
 ## Usage
 
@@ -359,4 +386,3 @@ approximately.
 2. Allow underlying type `std::array`.
 3. Allow `install` target.
 4. Turn above todos into issues.
-5. Create ToC.
