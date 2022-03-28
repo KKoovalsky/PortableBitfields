@@ -50,6 +50,69 @@ Examples of usage:
 
 ## Why use this library?
 
+Consider, as an example, the [MCP7940](http://ww1.microchip.com/downloads/en/devicedoc/20005010f.pdf) 
+RTC clock IC, I2C controlled.
+To read the current time, one needs to decode it from the registers below:
+
+![MCP7940_timekeeping_registers](docs/MCP7940_timekeeping_registers.png)
+
+Most of those registers contains BCD encoded value, plus some extra configuration bitfields. Let's try to decode the
+seconds the common way.
+
+So, firstly we define the positions and masks for the fields:
+
+```
+#define RTCSEC_SECTEN_MASK 0b01110000
+#define RTCSEC_SECTEN_POS 4
+
+#define RTCSEC_SECONE_MASK 0b00001111
+#define RTCSEC_SECONE_POS 0
+```
+
+Then we have to properly retrieve the data, from the register read over the wire:
+
+```
+uint8_t rtcsec{read(RTCSEC_ADDRESS)};
+unsigned second_tens{(rtc_sec & RTCSEC_SECTEN_MASK) >> RTCSEC_SECTEN_POS};
+unsigned second_ones{(rtc_sec & RTCSEC_SECONE_MASK) >> RTCSEC_SECONE_POS};
+unsigned seconds{second_tens * 10 + second_ones};
+```
+
+There is ambiguity, because we have to remember that the mask here is shifted, so it masks the field value in-place.
+After masking, we have to shift the value to retrieve it. Another approach is to apply the mask after shifting, so
+it means that one have to remember which approach is used, when retrieving the bitfield values.
+
+Now, in each register, for each bitfield, we have to define a mask and the position of the bitfield. That explodes
+number of the defines. For MCP7940 it will be around 20 pairs of such defines, to handle the timekeeping registers. 
+Then we have to implement the actual code which retrieves the value for each such register. That is error-prone and
+vulnerable to human-error.
+
+The example above is quite easy, but imagine implementing e.g. a BLE stack, and defining all the header formats
+by hand, the way explained above; or a more complex device with 4-byte registers, having multiple various fields. Auch!
+
+This library takes headache away from you. Taking the `RTCSEC` register:
+
+```
+enum class RtcsecFields
+{
+    st, secten, secone
+};
+
+using namespace jungles;
+using Rtcsec = Bitfield<uint8_t, // The underlying type
+                        Field<RtcSecFields::st, 1>, // Field ID (or name) and its size
+                        Field<RtcSecFields::secten, 3>, 
+                        Field<RtcSecFields::secone, 4>>;
+
+// ...
+Rtcsec rtcsec{read(RTCSEC_ADDRESS)};
+unsigned second_tens{rtcsec.at<RtcSecFields::secten>()};
+unsigned second_ones{rtcsec.at<RtcSecFields::secone>()};
+unsigned seconds{second_tens * 10 + second_ones};
+```
+
+As you can see, all the masking and shifting is done for you. Just define the layout and you are good to go!
+
 ## Usage
 
 ### Basic usage
