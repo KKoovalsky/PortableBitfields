@@ -394,12 +394,12 @@ using RightAlignedRegister = Bitfields<
     uint8_t,
     Field<Id::reserved, 4>,
     Field<Id::f1, 6>,
-    Field<Id::reserved, 6>>;
+    Field<Id::f2, 6>>;
 
 using LeftAlignedRegister = Bitfields<
     uint8_t,
     Field<Id::f1, 6>,
-    Field<Id::reserved, 6>,
+    Field<Id::f2, 6>,
     Field<Id::reserved, 4>>;
 ```
 
