@@ -42,6 +42,7 @@ Examples of usage:
 * Bitfields are packed, thus straddling is supported.
 * Configurable padding, by enforcing whole underlying type allocation.
 * Implements bitfield serialization, deserialization and extraction of a single bitfield's value, with proper shifting.
+* Compile-time checking of the bitfield name.
 * No dynamic allocation (aka, no use of new/malloc).
 * No macros.
 * C++17.
