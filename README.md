@@ -56,7 +56,7 @@ To read the current time, one needs to decode it from the registers below:
 
 ![MCP7940_timekeeping_registers](docs/MCP7940_timekeeping_registers.png)
 
-Most of those registers contains BCD encoded value, plus some extra configuration bitfields. Let's try to decode the
+Most of those registers contain BCD encoded value, plus some extra configuration bitfields. Let's try to decode the
 seconds the common way.
 
 So, firstly we define the positions and masks for the fields:
