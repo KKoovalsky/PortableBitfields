@@ -45,6 +45,7 @@ Examples of usage:
 * Compile-time checking of the bitfield name.
 * No dynamic allocation (aka, no use of new/malloc).
 * No macros.
+* No exceptions.
 * C++17.
 * Tested with GCC 11.1 and Clang 13.0.0.
 * Supports bitfield groups total length up to 8 bytes.
