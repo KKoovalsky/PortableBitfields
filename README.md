@@ -281,7 +281,7 @@ bool MP2695::is_usb_plugged_in()
 ## Installation
 
 1. Copy the contents of `src` directory and use the header stright away, by including `jungles/bitfields.hpp` header.
-Remember the `-std=c++20` flag!.
+Remember the `-std=c++17` flag!.
 2. Use `FetchContent` CMake module:
 
 ```
