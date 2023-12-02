@@ -86,6 +86,15 @@ class Bitfields
     }
 
     template<auto FieldId>
+    constexpr const UnderlyingType& at() const noexcept
+    {
+        constexpr auto idx{ find_field_index<FieldId>() };
+        auto& result{ field_values[idx] };
+        result &= non_shifted_field_masks[idx];
+        return result;
+    }
+
+    template<auto FieldId>
     constexpr UnderlyingType extract() const noexcept
     {
         constexpr auto idx{find_field_index<FieldId>()};
