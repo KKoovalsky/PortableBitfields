@@ -188,7 +188,7 @@ class Bitfields
     static inline constexpr auto field_masks{to_shifted_field_masks()};
 
     static_assert(std::is_integral<UnderlyingType>::value, "UnderlyingType must be an integral type");
-    static_assert(not has_duplicates(), "Field IDs must not duplicate");
+    static_assert(!has_duplicates(), "Field IDs must not duplicate");
     static_assert(calculate_occupied_bit_size() == UnderlyingTypeBitSize,
                   "Accumulated bit size is not equal to underlying type's bit size");
 
