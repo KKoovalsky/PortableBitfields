@@ -86,6 +86,15 @@ class Bitfields
     }
 
     template<auto FieldId>
+    constexpr const UnderlyingType& at() const noexcept
+    {
+        constexpr auto idx{ find_field_index<FieldId>() };
+        auto& result{ field_values[idx] };
+        result &= non_shifted_field_masks[idx];
+        return result;
+    }
+
+    template<auto FieldId>
     constexpr UnderlyingType extract() const noexcept
     {
         constexpr auto idx{find_field_index<FieldId>()};
@@ -188,7 +197,7 @@ class Bitfields
     static inline constexpr auto field_masks{to_shifted_field_masks()};
 
     static_assert(std::is_integral<UnderlyingType>::value, "UnderlyingType must be an integral type");
-    static_assert(not has_duplicates(), "Field IDs must not duplicate");
+    static_assert(!has_duplicates(), "Field IDs must not duplicate");
     static_assert(calculate_occupied_bit_size() == UnderlyingTypeBitSize,
                   "Accumulated bit size is not equal to underlying type's bit size");
 
