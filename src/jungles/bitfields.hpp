@@ -7,10 +7,10 @@
 #define BITFIELDS_HPP
 
 #include <array>
+#include <climits>
 #include <cstdint>
 #include <iterator>
 #include <type_traits>
-#include <climits>
 
 namespace jungles
 {
