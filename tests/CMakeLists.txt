@@ -30,7 +30,9 @@ macro (CreateRuntimeTests)
     target_link_libraries(jungles_bitfield_runtime_tests PRIVATE Catch2::Catch2WithMain jungles::bitfield)
     target_compile_options(jungles_bitfield_runtime_tests PRIVATE -Wall -Wextra)
     add_test(NAME jungles_bitfield_runtime 
-        COMMAND valgrind --leak-check=full $<TARGET_FILE:jungles_bitfield_runtime_tests>)
+        COMMAND valgrind --leak-check=full $<TARGET_FILE:jungles_bitfield_runtime_tests>
+        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+    )
 
 endmacro()
 
@@ -44,7 +46,10 @@ function(CompileTimePositiveTest name test_source_file)
         EXCLUDE_FROM_ALL TRUE 
         EXCLUDE_FROM_DEFAULT_BUILD TRUE)
 
-    add_test(NAME ${name} COMMAND cmake --build . --target ${exec_name})
+    add_test(NAME ${name}
+        COMMAND cmake --build . --target ${exec_name}
+        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+    )
     set_tests_properties(${name} PROPERTIES LABELS "Portable")
 
 endfunction()
@@ -65,8 +70,10 @@ function(CompileTimeNegativeTest name test_body pass_regex)
         EXCLUDE_FROM_ALL TRUE 
         EXCLUDE_FROM_DEFAULT_BUILD TRUE)
 
-    add_test(NAME ${name} COMMAND 
-        ${CMAKE_COMMAND} --build . --target ${exec_name} --config $<CONFIGURATION>)
+    add_test(NAME ${name}
+        COMMAND ${CMAKE_COMMAND} --build . --target ${exec_name} --config $<CONFIGURATION>
+        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
+    )
     set_tests_properties(${name} PROPERTIES PASS_REGULAR_EXPRESSION ${pass_regex})
     set_tests_properties(${name} PROPERTIES LABELS "Portable")
 
