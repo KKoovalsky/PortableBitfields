@@ -29,8 +29,17 @@ macro (CreateRuntimeTests)
     )
     target_link_libraries(jungles_bitfield_runtime_tests PRIVATE Catch2::Catch2WithMain jungles::bitfield)
     target_compile_options(jungles_bitfield_runtime_tests PRIVATE $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wextra>)
+
+    find_program(VALGRIND valgrind)
+    if(VALGRIND)
+        set(cmd ${VALGRIND} --leak-check=full $<TARGET_FILE:jungles_bitfield_runtime_tests>)
+    else()
+        message(WARNING "valgrind not found! Running runtime tests without leak-checking.")
+        set(cmd $<TARGET_FILE:jungles_bitfield_runtime_tests>)
+    endif()
+
     add_test(NAME jungles_bitfield_runtime 
-        COMMAND valgrind --leak-check=full $<TARGET_FILE:jungles_bitfield_runtime_tests>
+        COMMAND ${cmd}
         WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
     )
 
