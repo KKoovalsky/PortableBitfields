@@ -41,7 +41,7 @@ function(CompileTimePositiveTest name test_source_file)
     set(exec_name test_${name})
     add_executable(${exec_name} ${test_source_file})
     target_link_libraries(${exec_name} PRIVATE jungles::bitfield)
-    target_compile_options(${exec_name} PRIVATE -Wall -Wextra)
+    target_compile_options(${exec_name} PRIVATE -Wall $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wextra>)
     set_target_properties(${exec_name} PROPERTIES 
         EXCLUDE_FROM_ALL TRUE 
         EXCLUDE_FROM_DEFAULT_BUILD TRUE)
