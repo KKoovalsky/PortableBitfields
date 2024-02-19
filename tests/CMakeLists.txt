@@ -28,7 +28,7 @@ macro (CreateRuntimeTests)
         test_overflow.cpp
     )
     target_link_libraries(jungles_bitfield_runtime_tests PRIVATE Catch2::Catch2WithMain jungles::bitfield)
-    target_compile_options(jungles_bitfield_runtime_tests PRIVATE -Wall $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wextra>)
+    target_compile_options(jungles_bitfield_runtime_tests PRIVATE $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wextra>)
     add_test(NAME jungles_bitfield_runtime 
         COMMAND valgrind --leak-check=full $<TARGET_FILE:jungles_bitfield_runtime_tests>
         WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
@@ -41,7 +41,7 @@ function(CompileTimePositiveTest name test_source_file)
     set(exec_name test_${name})
     add_executable(${exec_name} ${test_source_file})
     target_link_libraries(${exec_name} PRIVATE jungles::bitfield)
-    target_compile_options(${exec_name} PRIVATE -Wall $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wextra>)
+    target_compile_options(${exec_name} PRIVATE $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wextra>)
     set_target_properties(${exec_name} PROPERTIES 
         EXCLUDE_FROM_ALL TRUE 
         EXCLUDE_FROM_DEFAULT_BUILD TRUE)
