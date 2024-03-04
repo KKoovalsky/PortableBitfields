@@ -85,12 +85,12 @@ class Bitfields
         return result;
     }
 
+    //! const Bitfields do not need overflow to be checked, because it's impossible to overflow with construction only.
     template<auto FieldId>
     constexpr const UnderlyingType& at() const noexcept
     {
         constexpr auto idx{find_field_index<FieldId>()};
-        UnderlyingType& result{field_values[idx]};
-        result &= non_shifted_field_masks[idx];
+        const UnderlyingType& result{field_values[idx]};
         return result;
     }
 

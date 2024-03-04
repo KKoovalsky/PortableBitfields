@@ -26,6 +26,7 @@ macro (CreateRuntimeTests)
         test_serializing.cpp
         test_deserializing.cpp
         test_overflow.cpp
+        test_const.cpp
     )
     target_link_libraries(jungles_bitfield_runtime_tests PRIVATE Catch2::Catch2WithMain jungles::bitfield)
     target_compile_options(jungles_bitfield_runtime_tests PRIVATE $<$<NOT:$<CXX_COMPILER_ID:MSVC>>:-Wall -Wextra>)
