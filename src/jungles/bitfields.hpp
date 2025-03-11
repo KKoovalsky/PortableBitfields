@@ -114,19 +114,19 @@ class Bitfields {
   static inline constexpr auto to_non_shifted_field_masks() noexcept {
     std::array<UnderlyingType, NumberOfFields> field_masks = {};
 
-        for (unsigned i{0}; i < NumberOfFields; ++i)
-        {
-            auto field_size{static_cast<UnderlyingType>(field_sizes[i])};
-            // Funny! This is needed, because if we write: (1 << field_size) compiler will use type 'int' for one,
-            // and shifting (int << uint64_t) is undefined behavior; see:
-            // https://stackoverflow.com/questions/10499104/is-shifting-more-than-32-bits-of-a-uint64-t-integer-on-an-x86-machine-undefined#answer-10499371
-            auto one{static_cast<UnderlyingType>(1)};
-            if (field_size == UnderlyingTypeBitSize) {
-                field_masks[i] = ~0x0;
-            } else {
-                field_masks[i] = (one << field_size) - 1;
-            }
-        }
+    for (unsigned i{0}; i < NumberOfFields; ++i) {
+      auto field_size{static_cast<UnderlyingType>(field_sizes[i])};
+      // Funny! This is needed, because if we write: (1 << field_size) compiler
+      // will use type 'int' for one, and shifting (int << uint64_t) is
+      // undefined behavior; see:
+      // https://stackoverflow.com/questions/10499104/is-shifting-more-than-32-bits-of-a-uint64-t-integer-on-an-x86-machine-undefined#answer-10499371
+      auto one{static_cast<UnderlyingType>(1)};
+      if (field_size == UnderlyingTypeBitSize) {
+        field_masks[i] = ~0x0;
+      } else {
+        field_masks[i] = (one << field_size) - 1;
+      }
+    }
 
     return field_masks;
   }
