@@ -301,13 +301,15 @@ bool MP2695::is_usb_plugged_in()
 Remember the `-std=c++17` flag!.
 2. Use `FetchContent` CMake module:
 
+Note that the GIT_TAG should be updated to the most recent (or most desired) tag.  As of writing, this is v1.0.1
+
 ```
 include(FetchContent)
 
 FetchContent_Declare(
     JunglesBitfields
-    GIT_REPOSITORY https://github.com/KKoovalsky/PortableBitfields.git
-    # GIT_TAG <Some relevant SHA>
+    GIT_REPOSITORY https://github.com/PlexusEP/PortableBitfields.git
+    GIT_TAG v1.0.1
 )
 
 FetchContent_MakeAvailable(JunglesBitfields)
