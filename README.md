@@ -1,4 +1,16 @@
-# Note - Contributing Upstream
+# Portable Bitfields C++ library
+
+This is a C++17 cross-platform bitfields header-only library, with defined behaviour, in the contrary to the standard. 
+This library intends to strictly define the behaviour, which the standard leaves for the compilers to 
+define. Implements serialization and deserialization of the bitfields, and this is the main objective of this library.
+
+Examples of usage:
+
+* Accessing single bits of registers in ICs, from which the data is obtained through I2C, SPI, UART, ...
+* Protocol headers.
+* ...
+
+## Note - Contributing Upstream
 
 Formatting and several additional CMake files have been added since forking this repository.  When making changes that may be contributed upstream, these changes should not be included in the pull request.  
 
@@ -13,17 +25,6 @@ The v1.0.0 tag was created on the origional commit from the fork.  The recommend
  - Ensure that all formatting is correct to the .clang-format specification
  - Merge into main
 
-# Portable Bitfields C++ library
-
-This is a C++17 cross-platform bitfields header-only library, with defined behaviour, in the contrary to the standard. 
-This library intends to strictly define the behaviour, which the standard leaves for the compilers to 
-define. Implements serialization and deserialization of the bitfields, and this is the main objective of this library.
-
-Examples of usage:
-
-* Accessing single bits of registers in ICs, from which the data is obtained through I2C, SPI, UART, ...
-* Protocol headers.
-* ...
 
 ## Contents
 
