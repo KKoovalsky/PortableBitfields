@@ -1,3 +1,18 @@
+# Note - Contributing Upstream
+
+Formatting and several additional CMake files have been added since forking this repository.  When making changes that may be contributed upstream, these changes should not be included in the pull request.  
+
+The v1.0.0 tag was created on the origional commit from the fork.  The recommended development process is as follows:
+ 
+ - Check out v1.0.0
+ - Create a new branch
+ - Pull any upstream changes from the upstream repo (if they exist)
+ - Do development work
+ - Submit a PR request to upstream repo
+ - Pull .clang-format from main into branch
+ - Ensure that all formatting is correct to the .clang-format specification
+ - Merge into main
+
 # Portable Bitfields C++ library
 
 This is a C++17 cross-platform bitfields header-only library, with defined behaviour, in the contrary to the standard. 
