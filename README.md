@@ -304,17 +304,13 @@ Remember the `-std=c++17` flag!.
 Note that the GIT_TAG should be updated to the most recent (or most desired) tag.  As of writing, this is v1.0.1
 
 ```
-include(FetchContent)
+include(CPM)
 
-FetchContent_Declare(
-    JunglesBitfields
+CPMAddPackage(
+    NAME PortableBitfields
     GIT_REPOSITORY https://github.com/PlexusEP/PortableBitfields.git
     GIT_TAG v1.0.1
 )
-
-FetchContent_MakeAvailable(JunglesBitfields)
-
-# Use 'jungles::bitfield' library target
 
 ```
 
