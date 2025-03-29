@@ -122,7 +122,7 @@ class Bitfields {
       // https://stackoverflow.com/questions/10499104/is-shifting-more-than-32-bits-of-a-uint64-t-integer-on-an-x86-machine-undefined#answer-10499371
       auto one{static_cast<UnderlyingType>(1)};
       if (field_size == UnderlyingTypeBitSize) {
-        field_masks[i] = ~0x0;
+        field_masks[i] = static_cast<UnderlyingType>(~0x0);
       } else {
         field_masks[i] = (one << field_size) - 1;
       }
