@@ -1,0 +1,44 @@
+{
+    "version": 3,
+    "cmakeMinimumRequired": {
+        "major": 3,
+        "minor": 21,
+        "patch": 0
+    },
+    "configurePresets": [
+        {
+            "name": "default",
+            "description": "Default configuration",
+            "hidden": true,
+            "generator": "Ninja",
+            "binaryDir": "${sourceDir}/build/${presetName}",
+            "cacheVariables": {
+                "JUNGLES_BITFIELD_ENABLE_TESTING": "ON",
+                "JUNGLES_BITFIELD_ENABLE_PORTABILITY_TESTS": "OFF"
+            }
+        },
+        {
+            "name": "linux-clang-debug",
+            "inherits": "default",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Debug"
+            }
+        },
+        {
+            "name": "linux-clang-release",
+            "inherits": "default",
+            "cacheVariables": {
+                "CMAKE_BUILD_TYPE": "Release"
+            }
+        }
+    ],
+    "buildPresets": [
+        {
+            "name": "run-tests",
+            "configurePreset": "linux-clang-debug",
+            "targets": [
+                "all"
+            ]
+        }
+    ]
+}

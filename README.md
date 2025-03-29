@@ -10,6 +10,22 @@ Examples of usage:
 * Protocol headers.
 * ...
 
+## Note - Contributing Upstream
+
+Formatting and several additional CMake files have been added since forking this repository.  When making changes that may be contributed upstream, these changes should not be included in the pull request.  
+
+The v1.0.0 tag was created on the origional commit from the fork.  The recommended development process is as follows:
+ 
+ - Check out v1.0.0
+ - Create a new branch
+ - Pull any upstream changes from the upstream repo (if they exist)
+ - Do development work
+ - Submit a PR request to upstream repo
+ - Pull .clang-format from main into branch
+ - Ensure that all formatting is correct to the .clang-format specification
+ - Merge into main
+
+
 ## Contents
 
 - [Features](#features)
@@ -285,18 +301,16 @@ bool MP2695::is_usb_plugged_in()
 Remember the `-std=c++17` flag!.
 2. Use `FetchContent` CMake module:
 
+Note that the GIT_TAG should be updated to the most recent (or most desired) tag.  As of writing, this is v1.0.1
+
 ```
-include(FetchContent)
+include(CPM)
 
-FetchContent_Declare(
-    JunglesBitfields
-    GIT_REPOSITORY https://github.com/KKoovalsky/PortableBitfields.git
-    # GIT_TAG <Some relevant SHA>
+CPMAddPackage(
+    NAME PortableBitfields
+    GIT_REPOSITORY https://github.com/PlexusEP/PortableBitfields.git
+    GIT_TAG v1.0.1
 )
-
-FetchContent_MakeAvailable(JunglesBitfields)
-
-# Use 'jungles::bitfield' library target
 
 ```
 

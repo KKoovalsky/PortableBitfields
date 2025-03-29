@@ -1,0 +1,13 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "CMake: Configure",
+			"type": "cmake",
+			"command": "configure",
+			"preset": "${command:cmake.activeConfigurePresetName}",
+			"group": "build",
+			"problemMatcher": []
+		},
+	]
+}

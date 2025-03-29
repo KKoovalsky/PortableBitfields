@@ -1,0 +1,87 @@
+---
+Checks: '-*,bugprone-*,cert-*,clang-*, clang-analyzer-*, cppcoreguidelines-*,google-*,hicpp-*,llvm-else-after-return,llvm-header-guard,llvm-namespace-comment,llvm-prefer-*,llvm-qualified-auto,llvm-twine-local,misc-*,modernize-avoid-*,modernize-concat-nested-namespaces,modernize-deprecated-*,modernize-loop-convert,modernize-make-*,modernize-pass-by-value,modernize-raw-string-literal,modernize-redundant-void-arg,modernize-replace-*,modernize-return-braced-init-list,modernize-shrink-to-fit,modernize-unary-static-assert,modernize-use-auto,modernize-use-bool-literals,modernize-use-default-member-init,modernize-use-emplace,modernize-use-equals-*,modernize-use-nodiscard,modernize-use-noexcept,modernize-use-nullptr,modernize-use-override,modernize-use-transparent-functors,modernize-use-uncaught-exceptions,modernize-use-using,performance-*,readability-*,-google-readability-todo,-modernize-use-nodiscard,-readability-avoid-const-params-in-decls'
+WarningsAsErrors: 'bugprone-,cert-,cppcoreguidelines-*'
+HeaderFileExtensions:
+  - ''
+  - h
+  - hh
+  - hpp
+  - hxx
+ImplementationFileExtensions:
+  - c
+  - cc
+  - cpp
+  - cxx
+HeaderFilterRegex: '.*'
+ExcludeHeaderFilterRegex: '.cpm_cache'
+FormatStyle:     none
+CheckOptions:
+  misc-non-private-member-variables-in-classes.IgnoreClassesWithAllMemberVariablesBeingPublic: true
+  cppcoreguidelines-special-member-functions.AllowSoleDefaultDtor: true
+  hicpp-special-member-functions.AllowSoleDefaultDtor: true
+
+  # See https://github.com/llvm/llvm-project/issues/42391
+  performance-move-const-arg.CheckTriviallyCopyableMove: false
+  hicpp-move-const-arg.CheckTriviallyCopyableMove: false
+  performance-move-const-arg.CheckMoveToConstRef: false
+  hicpp-move-const-arg.CheckMoveToConstRef: false
+
+  # Variables and constants should be camelCase
+  readability-identifier-naming.VariableCase: camelBack
+
+  # Functions should be camelCase
+  readability-identifier-naming.FunctionCase: camelBack
+
+  # Classes, structs, unions, enums, and namespaces should be PascalCase
+  readability-identifier-naming.ClassCase: CamelCase
+  readability-identifier-naming.StructCase: CamelCase
+  readability-identifier-naming.UnionCase: CamelCase
+  readability-identifier-naming.EnumCase: CamelCase
+  readability-identifier-naming.NamespaceCase: CamelCase
+
+  # Enumerators should be PascalCase
+  readability-identifier-naming.EnumConstantCase: CamelCase
+
+  # Macros should be ALL_CAPS
+  readability-identifier-naming.MacroDefinitionCase: UPPER_CASE
+
+  # Global constants should be ALL_CAPS
+  readability-identifier-naming.GlobalConstantCase: UPPER_CASE
+
+  # Non-local constants should be ALL_CAPS
+  readability-identifier-naming.ClassConstantCase: UPPER_CASE
+  readability-identifier-naming.ConstexprVariableCase: UPPER_CASE
+
+  # Interfaces should be prefixed with "I"
+  readability-identifier-naming.AbstractClassPrefix: I
+
+  # Non-public data members should be prefixed with "m_"
+  readability-identifier-naming.PrivateMemberPrefix: m_
+  readability-identifier-naming.ProtectedMemberPrefix: m_
+
+  # Static data members should be prefixed with "s_"
+  readability-identifier-naming.StaticConstantPrefix: s_
+
+  # Typedefs and aliases should be PascalCase
+  readability-identifier-naming.TypedefCase: CamelCase
+  readability-identifier-naming.TypeAliasCase: CamelCase
+
+  # # Add these new options for include-cleaner configuration
+  # misc-include-cleaner.IgnoreHeaders: '.*\.hpp$'
+  # misc-include-cleaner.IgnoreHeadersFromHeaders: true
+
+  # misc-include-cleaner.IgnoreHeaders: '.*/vpu/.*\.hpp$'
+  # misc-include-cleaner.IgnoreHeadersFromHeaders: true
+  # misc-include-cleaner.ParseIncludes: true
+  # misc-include-cleaner.IncludeStyle: 'llvm'
+
+    # Include cleaner configuration that matches your project structure
+  misc-include-cleaner.IgnoreHeaders: '.*'
+  misc-include-cleaner.IgnoreHeadersFromHeaders: true
+  misc-include-cleaner.StrictnessLevel: 'low'
+  misc-include-cleaner.DeduplicateFindings: true
+
+
+  # misc-include-cleaner.IgnoreHeaders: '.*\.hpp$'
+  # misc-include-cleaner.IgnoreHeadersFromHeaders: true
+  # misc-include-cleaner.StrictnessLevel: 'low'
