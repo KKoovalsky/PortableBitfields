@@ -59,10 +59,12 @@ struct Field
     static inline constexpr auto size{Size};
 };
 
-template<typename UnderlyingType, typename... Fields>
+template<typename UT, typename... Fields>
 class Bitfields
 {
   public:
+    using UnderlyingType = UT;
+
     constexpr Bitfields() = default;
 
     constexpr Bitfields(UnderlyingType preload)
