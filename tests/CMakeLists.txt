@@ -92,6 +92,7 @@ endfunction()
 function(CreateCompileTimeTests)
 
     CompileTimePositiveTest(various_id_types test_various_id_types.cpp)
+    CompileTimePositiveTest(field_maxwidth test_field_maxwidth.cpp)
 
     CompileTimeNegativeTest(
         wrong_id_when_calling_at
