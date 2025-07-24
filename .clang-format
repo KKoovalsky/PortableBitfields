@@ -1,0 +1,26 @@
+# This is the formatting configuration file used by clangd based on styles.
+# You can use any of the possible style values listed below
+
+# For each input file clang-format will try to find the .clang-format file 
+# located in the closest parent directory of the input file.
+
+BasedOnStyle: Google
+
+# Possible values:
+# LLVM      - A style complying with the LLVM coding standards - https://llvm.org/docs/CodingStandards.html
+# Google    - A style complying with Google C++ style guide - https://google.github.io/styleguide/cppguide.html
+# Chromium  - A style complying with Chromium style guide - https://chromium.googlesource.com/chromium/src/+/HEAD/styleguide/c++/c++.md
+# Mozilla   - A style complying with Mozilla style guide - https://firefox-source-docs.mozilla.org/code-quality/coding-style/coding_style_cpp.html
+# WebKit    - A style complying with WebKit style guide - https://www.webkit.org/code-style-guidelines/
+
+# For more information you can check:
+# https://clang.llvm.org/docs/ClangFormatStyleOptions.html
+
+# Additional Customizations
+# Note that clang-format seems to be sensitive to the spacing and whitespace within configuration files such as this one.
+# Ensure there are no extra spaces prior to root level configuration items, and that level 1 sub-items are indented 4 spaces, etc.
+# Otherwise, the tool appears to revert to some default configuration.
+
+# Allow PC-lint message suppression with single-line comments. The "lint"
+# at the start of the comment must lie immediately adjacent to the "//".
+CommentPragmas: '^lint'
