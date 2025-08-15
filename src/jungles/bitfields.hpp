@@ -132,7 +132,7 @@ class Bitfields
 
     static inline constexpr auto to_non_shifted_field_masks() noexcept
     {
-        std::array<UnderlyingType, NumberOfFields> field_masks = {};
+        std::array<UnderlyingType, NumberOfFields> masks = {};
 
         for (unsigned i{0}; i < NumberOfFields; ++i)
         {
@@ -141,10 +141,10 @@ class Bitfields
             // and shifting (int << uint64_t) is undefined behavior; see:
             // https://stackoverflow.com/questions/10499104/is-shifting-more-than-32-bits-of-a-uint64-t-integer-on-an-x86-machine-undefined#answer-10499371
             auto one{static_cast<UnderlyingType>(1)};
-            field_masks[i] = (one << field_size) - 1;
+            masks[i] = (one << field_size) - 1;
         }
 
-        return field_masks;
+        return masks;
     }
 
     static inline constexpr auto to_shifted_field_masks() noexcept
