@@ -74,7 +74,7 @@ class Bitfields
             auto mask{field_masks[i]};
             auto masked_value{mask & preload};
             auto shift{field_shifts[i]};
-            field_values[i] = masked_value >> shift;
+            field_values[i] = static_cast<UnderlyingType>(masked_value >> shift);
         }
     }
 
@@ -141,7 +141,7 @@ class Bitfields
             // and shifting (int << uint64_t) is undefined behavior; see:
             // https://stackoverflow.com/questions/10499104/is-shifting-more-than-32-bits-of-a-uint64-t-integer-on-an-x86-machine-undefined#answer-10499371
             auto one{static_cast<UnderlyingType>(1)};
-            masks[i] = (one << field_size) - 1;
+            masks[i] = static_cast<UnderlyingType>((one << field_size) - 1);
         }
 
         return masks;
@@ -155,7 +155,7 @@ class Bitfields
         {
             auto mask{non_shifted_field_masks[i]};
             auto shift{field_shifts[i]};
-            masks[i] = mask << shift;
+            masks[i] = static_cast<UnderlyingType>(mask << shift);
         }
 
         return masks;
