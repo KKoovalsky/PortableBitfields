@@ -283,7 +283,25 @@ bool MP2695::is_usb_plugged_in()
 
 1. Copy the contents of `src` directory and use the header stright away, by including `jungles/bitfields.hpp` header.
 Remember the `-std=c++17` flag!
-2. Use [CPM](https://github.com/cpm-cmake/CPM.cmake):
+2. Use `FetchContent` CMake module:
+
+```
+include(FetchContent)
+
+FetchContent_Declare(
+    JunglesBitfields
+    GIT_REPOSITORY https://github.com/KKoovalsky/PortableBitfields.git
+    GIT_TAG <Some relevant tag or SHA>
+)
+
+FetchContent_MakeAvailable(JunglesBitfields)
+
+# Use 'jungles::bitfield' library target
+
+
+```
+
+Alternatively, you could use [CPM](https://github.com/cpm-cmake/CPM.cmake) instead of `FetchContent`:
 
 ```
 include(CPM)
@@ -295,7 +313,6 @@ CPMAddPackage(
 )
 
 # Use 'jungles::bitfield' library target
-
 ```
 
 ## Interface
