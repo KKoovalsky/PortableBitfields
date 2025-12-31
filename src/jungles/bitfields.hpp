@@ -61,7 +61,7 @@ class Bitfields {
       auto mask{field_masks[i]};
       auto masked_value{mask & preload};
       auto shift{field_shifts[i]};
-      field_values[i] = masked_value >> shift;
+      field_values[i] = static_cast<UnderlyingType>(masked_value >> shift);
     }
   }
 
