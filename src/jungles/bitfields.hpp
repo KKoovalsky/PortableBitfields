@@ -132,7 +132,7 @@ class Bitfields {
     for (unsigned i{0}; i < NumberOfFields; ++i) {
       auto mask{non_shifted_field_masks[i]};
       auto shift{field_shifts[i]};
-      masks[i] = mask << shift;
+      masks[i] = static_cast<UnderlyingType>(mask << shift);
     }
 
     return masks;
