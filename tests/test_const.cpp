@@ -10,8 +10,7 @@
 
 using namespace jungles;
 
-using Bf = Bitfields<uint16_t, Field<Reg::field1, 2>, Field<Reg::field2, 8>,
-                     Field<Reg::field3, 6>>;
+using Bf = Bitfields<uint16_t, Field<Reg::field1, 2>, Field<Reg::field2, 8>, Field<Reg::field3, 6>>;
 
 TEST_CASE("Const bitfields", "[const]") {
   SECTION("Reading bitfields") {

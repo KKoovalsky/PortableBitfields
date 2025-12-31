@@ -11,9 +11,7 @@
 using namespace jungles;
 
 TEST_CASE("One-byte-long bitfield group is serialized", "[serializing]") {
-  Bitfields<uint8_t, Field<Reg::field1, 2>, Field<Reg::field2, 4>,
-            Field<Reg::field3, 2>>
-      bf;
+  Bitfields<uint8_t, Field<Reg::field1, 2>, Field<Reg::field2, 4>, Field<Reg::field3, 2>> bf;
 
   bf.at<Reg::field1>() = 0b10;
   bf.at<Reg::field2>() = 0b0110;
@@ -24,9 +22,7 @@ TEST_CASE("One-byte-long bitfield group is serialized", "[serializing]") {
 
 TEST_CASE("Two-byte-long bitfield group is serialized", "[serializing]") {
   SECTION("Evenly aligned, four bitfields") {
-    Bitfields<uint16_t, Field<Reg::field1, 4>, Field<Reg::field2, 4>,
-              Field<Reg::field3, 4>, Field<Reg::field4, 4>>
-        bf;
+    Bitfields<uint16_t, Field<Reg::field1, 4>, Field<Reg::field2, 4>, Field<Reg::field3, 4>, Field<Reg::field4, 4>> bf;
 
     bf.at<Reg::field1>() = 0b0110;
     bf.at<Reg::field2>() = 0b1001;
@@ -37,9 +33,7 @@ TEST_CASE("Two-byte-long bitfield group is serialized", "[serializing]") {
   }
 
   SECTION("Two small bitfields, and one big") {
-    Bitfields<uint16_t, Field<Reg::field1, 1>, Field<Reg::field2, 1>,
-              Field<Reg::field3, 14>>
-        bf;
+    Bitfields<uint16_t, Field<Reg::field1, 1>, Field<Reg::field2, 1>, Field<Reg::field3, 14>> bf;
 
     bf.at<Reg::field1>() = 0b1;
     bf.at<Reg::field2>() = 0b0;
@@ -50,9 +44,7 @@ TEST_CASE("Two-byte-long bitfield group is serialized", "[serializing]") {
 }
 
 TEST_CASE("Four-byte-long bitfield group is serialized", "[serializing]") {
-  Bitfields<uint32_t, Field<Reg::field1, 7>, Field<Reg::field2, 21>,
-            Field<Reg::field3, 4>>
-      bf;
+  Bitfields<uint32_t, Field<Reg::field1, 7>, Field<Reg::field2, 21>, Field<Reg::field3, 4>> bf;
 
   bf.at<Reg::field1>() = 0b1010101;
   bf.at<Reg::field2>() = 0b000011111111111110000;

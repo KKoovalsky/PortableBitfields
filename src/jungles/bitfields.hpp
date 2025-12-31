@@ -34,8 +34,7 @@ constexpr T accumulate(InputIt first, InputIt last, T init) {
 }
 
 template <class InputIt, class OutputIt, class UnaryOperation>
-constexpr OutputIt transform(InputIt first1, InputIt last1, OutputIt d_first,
-                             UnaryOperation unary_op) {
+constexpr OutputIt transform(InputIt first1, InputIt last1, OutputIt d_first, UnaryOperation unary_op) {
   while (first1 != last1) {
     *d_first++ = unary_op(*first1++);
   }
@@ -93,9 +92,7 @@ class Bitfields {
     return result;
   }
 
-  constexpr UnderlyingType serialize() const noexcept {
-    return (extract<Fields::id>() | ... | 0);
-  }
+  constexpr UnderlyingType serialize() const noexcept { return (extract<Fields::id>() | ... | 0); }
 
  private:
   static inline constexpr auto to_field_shifts() noexcept {
@@ -143,8 +140,7 @@ class Bitfields {
 
   template <auto FieldId>
   static inline constexpr auto find_field_index() noexcept {
-    constexpr auto it{
-        detail::find(std::begin(field_ids), std::end(field_ids), FieldId)};
+    constexpr auto it{detail::find(std::begin(field_ids), std::end(field_ids), FieldId)};
     static_assert(it != std::end(field_ids), "Field ID not found");
     return static_cast<unsigned>(std::distance(std::begin(field_ids), it));
   }
@@ -161,28 +157,23 @@ class Bitfields {
   }
 
   static inline constexpr unsigned calculate_occupied_bit_size() {
-    return detail::accumulate(std::begin(field_sizes), std::end(field_sizes),
-                              0u);
+    return detail::accumulate(std::begin(field_sizes), std::end(field_sizes), 0u);
   }
 
   static inline constexpr unsigned NumberOfFields{sizeof...(Fields)};
   static inline constexpr unsigned UnderlyingTypeSize{sizeof(UnderlyingType)};
-  static inline constexpr unsigned UnderlyingTypeBitSize{UnderlyingTypeSize *
-                                                         CHAR_BIT};
+  static inline constexpr unsigned UnderlyingTypeBitSize{UnderlyingTypeSize * CHAR_BIT};
 
   static inline constexpr std::array field_ids{Fields::id...};
   static inline constexpr std::array field_sizes{Fields::size...};
   static inline constexpr auto field_shifts{to_field_shifts()};
-  static inline constexpr auto non_shifted_field_masks{
-      to_non_shifted_field_masks()};
+  static inline constexpr auto non_shifted_field_masks{to_non_shifted_field_masks()};
   static inline constexpr auto field_masks{to_shifted_field_masks()};
 
-  static_assert(std::is_integral<UnderlyingType>::value,
-                "UnderlyingType must be an integral type");
+  static_assert(std::is_integral<UnderlyingType>::value, "UnderlyingType must be an integral type");
   static_assert(!has_duplicates(), "Field IDs must not duplicate");
-  static_assert(
-      calculate_occupied_bit_size() == UnderlyingTypeBitSize,
-      "Accumulated bit size is not equal to underlying type's bit size");
+  static_assert(calculate_occupied_bit_size() == UnderlyingTypeBitSize,
+                "Accumulated bit size is not equal to underlying type's bit size");
 
   std::array<UnderlyingType, NumberOfFields> field_values = {};
 };

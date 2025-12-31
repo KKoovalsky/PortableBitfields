@@ -12,9 +12,7 @@ using namespace jungles;
 
 TEST_CASE("Extracts bitfields on one-byte long bitfield", "[extract]") {
   SECTION("For three fields, almost evenly aligned") {
-    Bitfields<uint8_t, Field<Reg::field1, 3>, Field<Reg::field2, 2>,
-              Field<Reg::field3, 3>>
-        bf;
+    Bitfields<uint8_t, Field<Reg::field1, 3>, Field<Reg::field2, 2>, Field<Reg::field3, 3>> bf;
 
     bf.at<Reg::field1>() = 0b101;
     bf.at<Reg::field2>() = 0b11;
@@ -26,9 +24,7 @@ TEST_CASE("Extracts bitfields on one-byte long bitfield", "[extract]") {
   }
 
   SECTION("For four fields, with various sizes") {
-    Bitfields<uint8_t, Field<Reg::field1, 1>, Field<Reg::field2, 4>,
-              Field<Reg::field3, 1>, Field<Reg::field4, 2>>
-        bf;
+    Bitfields<uint8_t, Field<Reg::field1, 1>, Field<Reg::field2, 4>, Field<Reg::field3, 1>, Field<Reg::field4, 2>> bf;
 
     bf.at<Reg::field1>() = 0b1;
     bf.at<Reg::field2>() = 0b0101;
@@ -42,10 +38,8 @@ TEST_CASE("Extracts bitfields on one-byte long bitfield", "[extract]") {
   }
 
   SECTION("For each field having size one") {
-    Bitfields<uint8_t, Field<Reg::field1, 1>, Field<Reg::field2, 1>,
-              Field<Reg::field3, 1>, Field<Reg::field4, 1>,
-              Field<Reg::field5, 1>, Field<Reg::field6, 1>,
-              Field<Reg::field7, 1>, Field<Reg::field8, 1>>
+    Bitfields<uint8_t, Field<Reg::field1, 1>, Field<Reg::field2, 1>, Field<Reg::field3, 1>, Field<Reg::field4, 1>,
+              Field<Reg::field5, 1>, Field<Reg::field6, 1>, Field<Reg::field7, 1>, Field<Reg::field8, 1>>
         bf;
 
     bf.at<Reg::field1>() = 0b1;
@@ -76,9 +70,7 @@ TEST_CASE("Extracts bitfields on one-byte long bitfield", "[extract]") {
 
 TEST_CASE("Extracts bitfields on 4-byte long bitfield", "[extract]") {
   SECTION("For three fields, evenly aligned") {
-    Bitfields<uint32_t, Field<Reg::field1, 11>, Field<Reg::field2, 11>,
-              Field<Reg::field3, 10>>
-        bf;
+    Bitfields<uint32_t, Field<Reg::field1, 11>, Field<Reg::field2, 11>, Field<Reg::field3, 10>> bf;
 
     bf.at<Reg::field1>() = 0b10101010101;
     bf.at<Reg::field2>() = 0b01101101100;
@@ -90,9 +82,7 @@ TEST_CASE("Extracts bitfields on 4-byte long bitfield", "[extract]") {
   }
 
   SECTION("For a two bit bitfield lying across two bytes") {
-    Bitfields<uint32_t, Field<Reg::field1, 15>, Field<Reg::field2, 2>,
-              Field<Reg::field3, 15>>
-        bf;
+    Bitfields<uint32_t, Field<Reg::field1, 15>, Field<Reg::field2, 2>, Field<Reg::field3, 15>> bf;
     bf.at<Reg::field1>() = 0b000001111100000;
     bf.at<Reg::field2>() = 0b11;
     bf.at<Reg::field3>() = 0b000001111100000;

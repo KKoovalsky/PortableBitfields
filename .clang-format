@@ -20,6 +20,7 @@ BasedOnStyle: Google
 # Note that clang-format seems to be sensitive to the spacing and whitespace within configuration files such as this one.
 # Ensure there are no extra spaces prior to root level configuration items, and that level 1 sub-items are indented 4 spaces, etc.
 # Otherwise, the tool appears to revert to some default configuration.
+ColumnLimit: 120
 
 # Allow PC-lint message suppression with single-line comments. The "lint"
 # at the start of the comment must lie immediately adjacent to the "//".
